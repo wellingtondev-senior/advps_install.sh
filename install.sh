@@ -10,15 +10,24 @@
 #            e a configuração de serviços para serem executados automaticamente.
 ################################################################################
 
-# Função de log para imprimir mensagens com timestamps
+# Cores para log
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # Sem cor
+
+# Função de log para imprimir mensagens com timestamps e cores
 log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+    local color=$1
+    shift
+    echo -e "${color}[$(date '+%Y-%m-%d %H:%M:%S')] $@${NC}"
 }
 
-log "Iniciando a configuração do servidor..."
+log $BLUE "Iniciando a configuração do servidor..."
 
 # Atualizar lista de pacotes e instalar dependências
-log "Atualizando lista de pacotes e instalando dependências..."
+log $YELLOW "Atualizando lista de pacotes e instalando dependências..."
 sudo apt-get update
 sudo apt-get install -y \
     apt-transport-https \
@@ -27,65 +36,65 @@ sudo apt-get install -y \
     software-properties-common
 
 # Adicionar chave GPG oficial do Docker
-log "Adicionando chave GPG oficial do Docker..."
+log $YELLOW "Adicionando chave GPG oficial do Docker..."
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 # Adicionar repositório Docker
-log "Adicionando repositório Docker..."
+log $YELLOW "Adicionando repositório Docker..."
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 
 # Atualizar lista de pacotes novamente
-log "Atualizando lista de pacotes novamente..."
+log $YELLOW "Atualizando lista de pacotes novamente..."
 sudo apt-get update
 
 # Instalar Docker
-log "Instalando Docker..."
+log $YELLOW "Instalando Docker..."
 sudo apt-get install -y docker-ce
 
 # Adicionar usuário atual ao grupo Docker para executar comandos sem sudo
-log "Adicionando usuário atual ao grupo Docker..."
+log $YELLOW "Adicionando usuário atual ao grupo Docker..."
 sudo usermod -aG docker $USER
 
 # Baixar a última versão estável do Docker Compose
-log "Baixando a última versão estável do Docker Compose..."
+log $YELLOW "Baixando a última versão estável do Docker Compose..."
 DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
 sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 # Dar permissão de execução para o Docker Compose
-log "Dando permissão de execução para o Docker Compose..."
+log $YELLOW "Dando permissão de execução para o Docker Compose..."
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Verificar se o Docker e o Docker Compose foram instalados corretamente
-log "Verificando se o Docker e o Docker Compose foram instalados corretamente..."
+log $GREEN "Verificando se o Docker e o Docker Compose foram instalados corretamente..."
 docker --version
 docker-compose --version
 
-log "Instalação do Docker e Docker Compose concluída com sucesso."
-log "Você pode precisar sair e entrar novamente para aplicar as alterações do grupo Docker."
+log $GREEN "Instalação do Docker e Docker Compose concluída com sucesso."
+log $GREEN "Você pode precisar sair e entrar novamente para aplicar as alterações do grupo Docker."
 
 # Atualizar pacotes e instalar NGINX
-log "Atualizando pacotes e instalando NGINX..."
+log $YELLOW "Atualizando pacotes e instalando NGINX..."
 sudo apt update
 sudo apt install -y nginx
 
 # Habilitar e iniciar o serviço NGINX
-log "Habilitando e iniciando o serviço NGINX..."
+log $YELLOW "Habilitando e iniciando o serviço NGINX..."
 sudo systemctl enable nginx
 sudo systemctl start nginx
 
 # Exibir o status do serviço NGINX
-log "Verificando o status do serviço NGINX..."
+log $YELLOW "Verificando o status do serviço NGINX..."
 sudo systemctl status nginx
 
 # Verificar a versão do NGINX
-log "Verificando a versão do NGINX..."
+log $YELLOW "Verificando a versão do NGINX..."
 nginx -v
 
 # Verificar se o NGINX está escutando nas portas 80 e 443
-log "Verificando se o NGINX está escutando nas portas 80 e 443..."
+log $YELLOW "Verificando se o NGINX está escutando nas portas 80 e 443..."
 sudo netstat -tuln | grep ':80\|:443'
 
-log "NGINX instalado e em execução com sucesso."
+log $GREEN "NGINX instalado e em execução com sucesso."
