@@ -80,4 +80,12 @@ sudo systemctl start nginx
 log "Verificando o status do serviço NGINX..."
 sudo systemctl status nginx
 
+# Verificar a versão do NGINX
+log "Verificando a versão do NGINX..."
+nginx -v
+
+# Verificar se o NGINX está escutando nas portas 80 e 443
+log "Verificando se o NGINX está escutando nas portas 80 e 443..."
+sudo netstat -tuln | grep ':80\|:443'
+
 log "NGINX instalado e em execução com sucesso."
