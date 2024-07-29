@@ -83,8 +83,8 @@ sudo apt install -y nginx
 
 # Habilitar e iniciar o serviço NGINX
 log $YELLOW "Habilitando e iniciando o serviço NGINX..."
-sudo systemctl enable nginx
-sudo systemctl start nginx
+sudo systemctl enable nginx --quiet
+sudo systemctl start nginx --quiet
 
 
 
