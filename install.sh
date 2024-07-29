@@ -107,6 +107,32 @@ sudo git clone $REPO_URL $PROJECT_DIR
 log $YELLOW "Entrando no diretório do projeto..."
 cd $PROJECT_DIR
 
+# Instalar NVM, Node.js LTS e PM2
+log $YELLOW "Instalando NVM, Node.js LTS e PM2..."
+
+# Baixar e instalar o NVM
+log $YELLOW "Baixando e instalando NVM..."
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+# Carregar o NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Instalar a versão LTS do Node.js
+log $YELLOW "Instalando a versão LTS do Node.js..."
+nvm install --lts
+
+# Instalar PM2 globalmente
+log $YELLOW "Instalando PM2 globalmente..."
+npm install -g pm2
+
+# Configurar PM2 para iniciar automaticamente na inicialização do sistema
+log $YELLOW "Configurando PM2 para iniciar automaticamente na inicialização do sistema..."
+pm2 startup systemd
+pm2 save
+
+log $GREEN "NVM, Node.js LTS e PM2 instalados e configurados com sucesso."
+
 # Instalar dependências e construir o projeto
 log $YELLOW "Instalando dependências do projeto..."
 npm install
@@ -140,28 +166,4 @@ sudo ufw enable
 
 log $GREEN "Firewall configurado. Portas 80, 443 e 5810 estão abertas."
 
-# Instalar NVM, Node.js LTS e PM2
-log $YELLOW "Instalando NVM, Node.js LTS e PM2..."
 
-# Baixar e instalar o NVM
-log $YELLOW "Baixando e instalando NVM..."
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-
-# Carregar o NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Instalar a versão LTS do Node.js
-log $YELLOW "Instalando a versão LTS do Node.js..."
-nvm install --lts
-
-# Instalar PM2 globalmente
-log $YELLOW "Instalando PM2 globalmente..."
-npm install -g pm2
-
-# Configurar PM2 para iniciar automaticamente na inicialização do sistema
-log $YELLOW "Configurando PM2 para iniciar automaticamente na inicialização do sistema..."
-pm2 startup systemd
-pm2 save
-
-log $GREEN "NVM, Node.js LTS e PM2 instalados e configurados com sucesso."
