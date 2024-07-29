@@ -80,7 +80,7 @@ export NVM_DIR="$HOME/.nvm"
 # Instalar a versão LTS do Node.js
 log $YELLOW "Instalando a versão LTS do Node.js..."
 nvm install --lts
-
+nvm use --lts
 # Instalar PM2 globalmente
 log $YELLOW "Instalando PM2 globalmente..."
 npm install -g pm2
