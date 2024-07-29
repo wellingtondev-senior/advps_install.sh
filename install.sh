@@ -38,45 +38,6 @@ sudo apt-get install -y \
     git \
     ufw
 
-# Adicionar chave GPG oficial do Docker
-log $YELLOW "Adicionando chave GPG oficial do Docker..."
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-# Adicionar repositório Docker
-log $YELLOW "Adicionando repositório Docker..."
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-
-# Atualizar lista de pacotes novamente
-log $YELLOW "Atualizando lista de pacotes novamente..."
-sudo apt-get update
-
-# Instalar Docker
-log $YELLOW "Instalando Docker..."
-sudo apt-get install -y docker-ce
-
-# Adicionar usuário atual ao grupo Docker para executar comandos sem sudo
-log $YELLOW "Adicionando usuário atual ao grupo Docker..."
-sudo usermod -aG docker $USER
-
-# Baixar a última versão estável do Docker Compose
-log $YELLOW "Baixando a última versão estável do Docker Compose..."
-DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
-sudo curl -L "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-# Dar permissão de execução para o Docker Compose
-log $YELLOW "Dando permissão de execução para o Docker Compose..."
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Verificar se o Docker e o Docker Compose foram instalados corretamente
-log $GREEN "Verificando se o Docker e o Docker Compose foram instalados corretamente..."
-docker --version
-docker-compose --version
-
-log $GREEN "Instalação do Docker e Docker Compose concluída com sucesso."
-log $GREEN "Você pode precisar sair e entrar novamente para aplicar as alterações do grupo Docker."
 
 # Atualizar pacotes e instalar NGINX
 log $YELLOW "Atualizando pacotes e instalando NGINX..."
