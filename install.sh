@@ -77,6 +77,11 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+# Adicionar NVM ao .bashrc para garantir que esteja disponível em novos terminais
+echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc
+echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc
+echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> ~/.bashrc
+
 # Instalar a versão LTS do Node.js
 log $YELLOW "Instalando a versão LTS do Node.js..."
 nvm install --lts
@@ -92,6 +97,12 @@ pm2 save
 
 log $GREEN "NVM, Node.js LTS e PM2 instalados e configurados com sucesso."
 
+# Verificar se o arquivo package.json existe
+if [ ! -f "$PROJECT_DIR/package.json" ]; then
+    log $RED "Erro: O arquivo package.json não foi encontrado no diretório $PROJECT_DIR."
+    exit 1
+fi
+
 # Instalar dependências e construir o projeto
 log $YELLOW "Instalando dependências do projeto..."
 npm install
@@ -105,6 +116,7 @@ pm2 start npm --name "app" -- start
 
 # Salvar o estado do PM2
 pm2 save
+
 
 
 
