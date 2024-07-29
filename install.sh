@@ -86,13 +86,9 @@ log $YELLOW "Habilitando e iniciando o serviço NGINX..."
 sudo systemctl enable nginx
 sudo systemctl start nginx
 
-# Exibir o status do serviço NGINX
-log $YELLOW "Verificando o status do serviço NGINX..."
-sudo systemctl status nginx
 
-# Verificar a versão do NGINX
-log $YELLOW "Verificando a versão do NGINX..."
-nginx -v
+
+
 
 # Verificar se o NGINX está escutando nas portas 80 e 443
 log $YELLOW "Verificando se o NGINX está escutando nas portas 80 e 443..."
