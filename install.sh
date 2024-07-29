@@ -33,7 +33,8 @@ sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
-    software-properties-common
+    software-properties-common \
+    git
 
 # Adicionar chave GPG oficial do Docker
 log $YELLOW "Adicionando chave GPG oficial do Docker..."
@@ -98,3 +99,26 @@ log $YELLOW "Verificando se o NGINX está escutando nas portas 80 e 443..."
 sudo netstat -tuln | grep ':80\|:443'
 
 log $GREEN "NGINX instalado e em execução com sucesso."
+
+# Configuração do diretório do projeto e execução do Docker
+PROJECT_DIR="/opt/devcloud.com"
+REPO_URL="git@github.com:wellingtondev-senior/api.wellingtondev.com.git"
+
+# Criar o diretório do projeto e clonar o repositório
+log $YELLOW "Criando o diretório do projeto e clonando o repositório..."
+sudo mkdir -p $PROJECT_DIR
+sudo git clone $REPO_URL $PROJECT_DIR
+
+# Entrar no diretório do projeto
+log $YELLOW "Entrando no diretório do projeto..."
+cd $PROJECT_DIR
+
+# Construir e executar os containers usando Docker Compose
+log $YELLOW "Construindo e iniciando containers com Docker Compose..."
+sudo docker-compose up --build -d
+
+# Verificar se os containers estão em execução
+log $GREEN "Verificando se os containers estão em execução..."
+sudo docker ps
+
+log $GREEN "Projeto configurado e containers em execução com sucesso."
