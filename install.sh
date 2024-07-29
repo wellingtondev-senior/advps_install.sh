@@ -87,6 +87,17 @@ echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> ~/.
 
 # Carregar o NVM no shell atual
 source ~/.bashrc
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Adicionar Node.js e npm ao PATH
+export PATH="$NVM_DIR/versions/node/$(nvm version)/bin:$PATH"
+
+# Verificar se nvm, node e npm estão instalados corretamente
+log $YELLOW "Verificando instalações do NVM, Node.js e npm..."
+command -v nvm
+command -v node
+command -v npm
 
 # Instalar a versão LTS do Node.js
 log $YELLOW "Instalando a versão LTS do Node.js..."
@@ -96,6 +107,10 @@ nvm use --lts
 # Instalar PM2 globalmente
 log $YELLOW "Instalando PM2 globalmente..."
 npm install -g pm2
+
+# Verificar se pm2 está instalado corretamente
+log $YELLOW "Verificando instalação do PM2..."
+command -v pm2
 
 # Configurar PM2 para iniciar automaticamente na inicialização do sistema
 log $YELLOW "Configurando PM2 para iniciar automaticamente na inicialização do sistema..."
