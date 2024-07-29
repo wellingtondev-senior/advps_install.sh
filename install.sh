@@ -62,6 +62,9 @@ log $YELLOW "Criando o diretório do projeto e clonando o repositório..."
 sudo mkdir -p $PROJECT_DIR
 sudo git clone $REPO_URL $PROJECT_DIR
 
+# Garantir que o diretório do projeto pertença ao usuário atual
+sudo chown -R $USER:$USER $PROJECT_DIR
+
 # Entrar no diretório do projeto
 log $YELLOW "Entrando no diretório do projeto..."
 cd $PROJECT_DIR
@@ -82,10 +85,14 @@ echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc
 echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc
 echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> ~/.bashrc
 
+# Carregar o NVM no shell atual
+source ~/.bashrc
+
 # Instalar a versão LTS do Node.js
 log $YELLOW "Instalando a versão LTS do Node.js..."
 nvm install --lts
 nvm use --lts
+
 # Instalar PM2 globalmente
 log $YELLOW "Instalando PM2 globalmente..."
 npm install -g pm2
@@ -117,9 +124,6 @@ pm2 start npm --name "app" -- start
 # Salvar o estado do PM2
 pm2 save
 
-
-
-
 # Configurar firewall
 log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443 e 5810..."
 sudo ufw allow 80/tcp
@@ -128,3 +132,5 @@ sudo ufw allow 5810/tcp
 sudo ufw --force enable
 
 log $GREEN "Firewall configurado. Portas 80, 443 e 5810 estão abertas."
+
+log $BLUE "Configuração do servidor concluída com sucesso."
