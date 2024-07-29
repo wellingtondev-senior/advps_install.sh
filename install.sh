@@ -38,11 +38,9 @@ sudo apt-get install -y \
     git \
     ufw
 
-
 # Atualizar pacotes e instalar NGINX
 log $YELLOW "Atualizando pacotes e instalando NGINX..."
-sudo apt update
-sudo apt install -y nginx
+sudo apt-get install -y nginx
 
 # Habilitar e iniciar o serviço NGINX
 log $YELLOW "Habilitando e iniciando o serviço NGINX..."
@@ -89,7 +87,7 @@ npm install -g pm2
 
 # Configurar PM2 para iniciar automaticamente na inicialização do sistema
 log $YELLOW "Configurando PM2 para iniciar automaticamente na inicialização do sistema..."
-pm2 startup systemd
+pm2 startup systemd -u $USER --hp $HOME
 pm2 save
 
 log $GREEN "NVM, Node.js LTS e PM2 instalados e configurados com sucesso."
@@ -108,23 +106,13 @@ pm2 start npm --name "app" -- start
 # Salvar o estado do PM2
 pm2 save
 
-# Construir e executar os containers usando Docker Compose
-log $YELLOW "Construindo e iniciando containers com Docker Compose..."
-sudo docker-compose up --build -d
 
-# Verificar se os containers estão em execução
-log $GREEN "Verificando se os containers estão em execução..."
-sudo docker ps
-
-log $GREEN "Projeto configurado e containers em execução com sucesso."
 
 # Configurar firewall
 log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443 e 5810..."
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 5810/tcp
-sudo ufw enable
+sudo ufw --force enable
 
 log $GREEN "Firewall configurado. Portas 80, 443 e 5810 estão abertas."
-
-
