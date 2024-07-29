@@ -34,7 +34,8 @@ sudo apt-get install -y \
     ca-certificates \
     curl \
     software-properties-common \
-    git
+    git \
+    ufw
 
 # Adicionar chave GPG oficial do Docker
 log $YELLOW "Adicionando chave GPG oficial do Docker..."
@@ -86,10 +87,6 @@ log $YELLOW "Habilitando e iniciando o serviço NGINX..."
 sudo systemctl enable nginx --quiet
 sudo systemctl start nginx --quiet
 
-
-
-
-
 # Verificar se o NGINX está escutando nas portas 80 e 443
 log $YELLOW "Verificando se o NGINX está escutando nas portas 80 e 443..."
 sudo netstat -tuln | grep ':80\|:443'
@@ -118,3 +115,12 @@ log $GREEN "Verificando se os containers estão em execução..."
 sudo docker ps
 
 log $GREEN "Projeto configurado e containers em execução com sucesso."
+
+# Configurar firewall
+log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443 e 5810..."
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 5810/tcp
+sudo ufw enable
+
+log $GREEN "Firewall configurado. Portas 80, 443 e 5810 estão abertas."
