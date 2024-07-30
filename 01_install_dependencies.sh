@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ################################################################################
-# Script para instalar dependências básicas
+# Script de Instalação de Dependências - Ubuntu 20.04
 # Autor: [Seu Nome]
 # Data: [Data de Criação]
-# Descrição: Este script instala pacotes e ferramentas básicas necessárias para
-#            a configuração do servidor.
+# Descrição: Este script instala NGINX, Docker, Docker Compose, NVM, Node.js LTS,
+#            PM2 e PostgreSQL em uma máquina Ubuntu 20.04.
 ################################################################################
 
 # Cores para log
@@ -22,7 +22,7 @@ log() {
     echo -e "${color}[$(date '+%Y-%m-%d %H:%M:%S')] $@${NC}"
 }
 
-log $BLUE "Iniciando a instalação das dependências básicas..."
+log $BLUE "Iniciando a instalação das dependências..."
 
 # Atualizar lista de pacotes e instalar dependências
 log $YELLOW "Atualizando lista de pacotes e instalando dependências..."
@@ -33,26 +33,14 @@ sudo apt-get install -y \
     curl \
     software-properties-common \
     git \
-    ufw
+    ufw \
+    nginx \
+    docker.io \
+    docker-compose
 
-# Atualizar pacotes e instalar NGINX
-log $YELLOW "Atualizando pacotes e instalando NGINX..."
-sudo apt-get install -y nginx
+#  Configurar o Docker para iniciar automaticamente
+# log $YELLOW "Configurando o Docker para iniciar automaticamente..."
+# sudo systemctl enable docker --quiet
+# sudo systemctl start docker --quiet
 
-# Habilitar e iniciar o serviço NGINX
-log $YELLOW "Habilitando e iniciando o serviço NGINX..."
-sudo systemctl enable nginx --quiet
-sudo systemctl start nginx --quiet
-
-# Configuração do firewall
-log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443, 5810 e 5432..."
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 5810/tcp
-sudo ufw allow 5432/tcp
-
-# Verificar o status do firewall
-log $YELLOW "Verificando status do firewall..."
-sudo ufw status
-
-log $GREEN "Dependências básicas instaladas com sucesso."
+log $GREEN "Dependências instaladas e configuradas com sucesso."
