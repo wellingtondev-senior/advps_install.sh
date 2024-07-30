@@ -56,8 +56,7 @@ npm run build
 
 log $YELLOW "Iniciando o projeto com PM2..."
 # Iniciar o projeto com PM2 e definir o nome da aplicação como "api"
-pm2 start dist/main.js --name "api" --watch
-
+pm2 start npm --name devcloud --  start
 
 # Finalizar
 # log $GREEN "Configuração concluída. Credenciais de acesso padrão:"
