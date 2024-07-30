@@ -4,7 +4,7 @@
 # Script Principal para configuração do servidor e projeto
 # Autor: [Seu Nome]
 # Data: [Data de Criação]
-# Descrição: Este script executa os scripts individuais para configurar o servidor,
+# Descrição: Este script baixa e executa os scripts individuais para configurar o servidor,
 #            o NGINX e o projeto.
 ################################################################################
 
@@ -24,16 +24,33 @@ log() {
 
 log $BLUE "Iniciando o script principal para configuração do servidor e projeto..."
 
-# Caminho para os scripts individuais
+# URLs para os scripts individuais
+INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/01_install_dependencies.sh"
+NGINX_SCRIPT_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_configure_nginx.sh"
+PROJECT_SCRIPT_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
+
+# Caminho para os scripts temporários
 INSTALL_SCRIPT="./01_install_dependencies.sh"
 NGINX_SCRIPT="./02_configure_nginx.sh"
 PROJECT_SCRIPT="./03_setup_project.sh"
 
-# Verificar se os scripts existem e são executáveis
-if [ ! -x "$INSTALL_SCRIPT" ] || [ ! -x "$NGINX_SCRIPT" ] || [ ! -x "$PROJECT_SCRIPT" ]; then
-    log $RED "Um ou mais scripts necessários não foram encontrados ou não são executáveis."
-    exit 1
-fi
+# Função para baixar e verificar os scripts
+download_script() {
+    local url=$1
+    local dest=$2
+    log $YELLOW "Baixando script de: $url"
+    curl -s -o "$dest" "$url"
+    if [ $? -ne 0 ]; then
+        log $RED "Erro ao baixar o script de $url"
+        exit 1
+    fi
+    chmod +x "$dest"
+}
+
+# Baixar e executar os scripts individuais
+download_script "$INSTALL_SCRIPT_URL" "$INSTALL_SCRIPT"
+download_script "$NGINX_SCRIPT_URL" "$NGINX_SCRIPT"
+download_script "$PROJECT_SCRIPT_URL" "$PROJECT_SCRIPT"
 
 # Executar o script de instalação das dependências
 log $YELLOW "Executando o script de instalação das dependências..."
