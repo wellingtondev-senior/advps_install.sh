@@ -19,7 +19,6 @@ DOMINIO_FRONTEND='devcloud.top'
 DOMINIO_API='api.devcloud.top'
 SSL_CONFIG_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/07_ssl.sh"
 
-
 SSL_CONFIG_SCRIPT="./07_ssl.sh"
 
 # Função de log para imprimir mensagens com timestamps e cores
@@ -31,11 +30,8 @@ log() {
 
 log $BLUE "Iniciando a configuração do NGINX..."
 
-# Verificar se o arquivo de opções SSL/TLS do Certbot existe
-if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ]; then
-    log $RED "Arquivo /etc/letsencrypt/options-ssl-nginx.conf não encontrado. Instalando ou reinstalando Certbot..."
-    # Executar o script de instalação do Certbot
-    download_script() {
+# Função para baixar o script de configuração SSL
+download_script() {
     local url=$1
     local dest=$2
     log $YELLOW "Baixando script de: $url"
@@ -47,13 +43,15 @@ if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ]; then
     chmod +x "$dest"
 }
 
-# Baixar e executar os scripts individuais
-download_script "$SSL_CONFIG_URL" "$SSL_CONFIG_SCRIPT"
-    # Executar o script de instalação das dependências
-log $YELLOW "Executando configural do SSL..."
-bash "$SSL_CONFIG_SCRIPT"
+# Verificar se o arquivo de opções SSL/TLS do Certbot existe
+if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ]; then
+    log $RED "Arquivo /etc/letsencrypt/options-ssl-nginx.conf não encontrado. Instalando ou reinstalando Certbot..."
+    # Baixar e executar o script de configuração SSL
+    download_script "$SSL_CONFIG_URL" "$SSL_CONFIG_SCRIPT"
+    log $YELLOW "Executando script de configuração SSL..."
+    bash "$SSL_CONFIG_SCRIPT"
     if [ $? -ne 0 ]; then
-        log $RED "Erro ao instalar o Certbot. Abortando."
+        log $RED "Erro ao configurar o SSL. Abortando."
         exit 1
     fi
 fi
@@ -123,8 +121,15 @@ server {
 }
 EOF
 
-# Habilitar as configurações NGINX
+# Habilitar as configurações NGINX, removendo links simbólicos existentes se necessário
+if [ -L /etc/nginx/sites-enabled/devcloud.top ]; then
+    sudo rm /etc/nginx/sites-enabled/devcloud.top
+fi
 sudo ln -s /etc/nginx/sites-available/devcloud.top /etc/nginx/sites-enabled/
+
+if [ -L /etc/nginx/sites-enabled/api.devcloud.top ]; then
+    sudo rm /etc/nginx/sites-enabled/api.devcloud.top
+fi
 sudo ln -s /etc/nginx/sites-available/api.devcloud.top /etc/nginx/sites-enabled/
 
 # Testar e reiniciar o NGINX
