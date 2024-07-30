@@ -44,7 +44,7 @@ fi
 log $YELLOW "Gerando configuração padrão do SSL/TLS..."
 if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ]; then
     sudo mkdir -p /etc/letsencrypt
-    sudo curl -o /etc/letsencrypt/options-ssl-nginx.conf https://ssl-config.mozilla.org/ffdhe2048.pem
+    sudo curl -o /etc/letsencrypt/options-ssl-nginx.conf https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot-nginx.conf
     if [ $? -ne 0 ]; then
         log $RED "Erro ao baixar a configuração padrão do SSL/TLS. Abortando."
         exit 1
