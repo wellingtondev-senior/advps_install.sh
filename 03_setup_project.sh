@@ -1,14 +1,11 @@
 #!/bin/bash
 
 ################################################################################
-# Script de Configuração de Servidor - Ubuntu 20.04
+# Script para configurar o projeto
 # Autor: [Seu Nome]
 # Data: [Data de Criação]
-# Descrição: Este script instala e configura NGINX, Docker e Docker Compose,
-#            além do NVM, Node.js LTS e PM2 em uma máquina Ubuntu 20.04. 
-#            Inclui a atualização dos pacotes, a adição de repositórios necessários,
-#            a instalação de dependências e a configuração de serviços para serem 
-#            executados automaticamente.
+# Descrição: Este script configura o projeto, instala Node.js, PM2, Docker e
+#            Docker Compose, e finaliza a configuração.
 ################################################################################
 
 # Cores para log
@@ -25,36 +22,10 @@ log() {
     echo -e "${color}[$(date '+%Y-%m-%d %H:%M:%S')] $@${NC}"
 }
 
-log $BLUE "Iniciando a configuração do servidor..."
-
-# Atualizar lista de pacotes e instalar dependências
-log $YELLOW "Atualizando lista de pacotes e instalando dependências..."
-sudo apt-get update
-sudo apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common \
-    git \
-    ufw
-
-# Atualizar pacotes e instalar NGINX
-log $YELLOW "Atualizando pacotes e instalando NGINX..."
-sudo apt-get install -y nginx
-
-# Habilitar e iniciar o serviço NGINX
-log $YELLOW "Habilitando e iniciando o serviço NGINX..."
-sudo systemctl enable nginx --quiet
-sudo systemctl start nginx --quiet
-
-# Verificar se o NGINX está escutando nas portas 80 e 443
-log $YELLOW "Verificando se o NGINX está escutando nas portas 80 e 443..."
-sudo netstat -tuln | grep ':80\|:443'
-
-log $GREEN "NGINX instalado e em execução com sucesso."
+log $BLUE "Iniciando a configuração do projeto..."
 
 # Configuração do diretório do projeto e execução do Docker
-PROJECT_DIR="/opt/devcloud.com"
+PROJECT_DIR="/opt/devcloud/api.devcloud.top"
 REPO_URL="git@github.com:wellingtondev-senior/api.wellingtondev.com.git"
 
 # Criar o diretório do projeto e clonar o repositório
@@ -133,19 +104,54 @@ log $YELLOW "Construindo o projeto..."
 npm run build
 
 log $YELLOW "Iniciando o projeto com PM2..."
-# Iniciar o projeto com PM2 e definir o nome da aplicação como "app"
-pm2 start npm --name "app" -- start
+# Iniciar o projeto com PM2 e definir o nome da aplicação como "api"
+pm2 start dist/main.js --name "api" --watch
 
-# Salvar o estado do PM2
-pm2 save
+# Configurar Docker
+log $YELLOW "Instalando Docker e Docker Compose..."
+sudo apt-get update
+sudo apt-get install -y docker.io docker-compose
 
-# Configurar firewall
-log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443 e 5810..."
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 5810/tcp
-sudo ufw --force enable
+# Configurar e iniciar o Docker Compose
+log $YELLOW "Configurando e iniciando o Docker Compose..."
+# Criar arquivo docker-compose.yml
+cat <<EOF | sudo tee /opt/devcloud/docker-compose.yml
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data:/usr/share/nginx/html
+      - ./conf.d:/etc/nginx/conf.d
+    networks:
+      - devcloud_network
 
-log $GREEN "Firewall configurado. Portas 80, 443 e 5810 estão abertas."
+  api:
+    image: your-docker-image
+    ports:
+      - "5810:5810"
+    networks:
+      - devcloud_network
 
-log $BLUE "Configuração do servidor concluída com sucesso."
+networks:
+  devcloud_network:
+    driver: bridge
+EOF
+
+# Iniciar os serviços Docker
+sudo docker-compose -f /opt/devcloud/docker-compose.yml up -d
+
+# Finalizar
+log $GREEN "Configuração concluída. Credenciais de acesso padrão:"
+log $GREEN "PostgreSQL:"
+log $GREEN "  Username: postgres"
+log $GREEN "  Password: admin#master23451"
+log $GREEN "Aplicação:"
+log $GREEN "  Username: master"
+log $GREEN "  Password: master"
+log $GREEN "Acesse a aplicação em: https://devcloud.top"
+log $GREEN "Acesse a API em: https://api.devcloud.top"
+log $GREEN "Script de configuração concluído com sucesso."
