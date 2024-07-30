@@ -119,6 +119,24 @@ pm2 save
 
 log $GREEN "NVM, Node.js LTS e PM2 instalados e configurados com sucesso."
 
+# Função para encontrar uma porta disponível
+find_available_port() {
+    local PORT
+    for PORT in $(seq 3000 4000); do
+        if ! sudo lsof -i -P -n | grep LISTEN | grep -q ":$PORT"; then
+            echo $PORT
+            return
+        fi
+    done
+    echo "Nenhuma porta disponível encontrada."
+    exit 1
+}
+
+# Encontrar uma porta disponível e iniciar o projeto
+PORT=$(find_available_port)
+
+log $YELLOW "Atribuindo a porta $PORT para a aplicação..."
+
 # Verificar se o arquivo package.json existe
 if [ ! -f "$PROJECT_DIR/package.json" ]; then
     log $RED "Erro: O arquivo package.json não foi encontrado no diretório $PROJECT_DIR."
@@ -132,9 +150,9 @@ npm install
 log $YELLOW "Construindo o projeto..."
 npm run build
 
-log $YELLOW "Iniciando o projeto com PM2..."
+log $YELLOW "Iniciando o projeto com PM2 na porta $PORT..."
 # Iniciar o projeto com PM2 e definir o nome da aplicação como "app"
-pm2 start npm --name "app" -- start
+PORT=$PORT pm2 start npm --name "app" -- start
 
 # Salvar o estado do PM2
 pm2 save
@@ -186,7 +204,6 @@ sudo systemctl restart postgresql
 
 log $GREEN "PostgreSQL instalado e configurado com sucesso."
 
-
 # Configuração do diretório do projeto e execução do Docker
 PROJECT_DIR_FRONT="/opt/devcloud/devcloud.top"
 REPO_URL_FRONT="git@github.com:wellingtondev-senior/devcloud.top.git"
@@ -194,7 +211,7 @@ REPO_URL_FRONT="git@github.com:wellingtondev-senior/devcloud.top.git"
 # Criar o diretório do projeto e clonar o repositório
 log $YELLOW "Criando o diretório do projeto e clonando o repositório..."
 sudo mkdir -p $PROJECT_DIR_FRONT
-sudo git clone $REPO_URL $PROJECT_DIR_FRONT
+sudo git clone $REPO_URL_FRONT $PROJECT_DIR_FRONT
 
 # Garantir que o diretório do projeto pertença ao usuário atual
 sudo chown -R $USER:$USER $PROJECT_DIR_FRONT
@@ -215,25 +232,31 @@ npm install
 log $YELLOW "Construindo o projeto..."
 npm run build
 
-log $YELLOW "Iniciando o projeto com PM2..."
-# Iniciar o projeto com PM2 e definir o nome da aplicação como "app"
-pm2 start npm --name "app" -- start
+# Encontrar uma porta disponível e iniciar o projeto
+PORT_FRONT=$(find_available_port)
+
+log $YELLOW "Atribuindo a porta $PORT_FRONT para a aplicação..."
+
+log $YELLOW "Iniciando o projeto com PM2 na porta $PORT_FRONT..."
+# Iniciar o projeto com PM2 e definir o nome da aplicação como "app-front"
+PORT=$PORT_FRONT pm2 start npm --name "app-front" -- start
 
 # Salvar o estado do PM2
 pm2 save
 
 # Configurar firewall
-log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443, 5810 e 5432..."
+log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443, 5810, $PORT e $PORT_FRONT..."
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 5810/tcp
+sudo ufw allow $PORT/tcp
+sudo ufw allow $PORT_FRONT/tcp
 sudo ufw allow 5432/tcp
 
 # Verificar o status do firewall
 log $YELLOW "Verificando status do firewall..."
 sudo ufw status
 
-log $GREEN "Firewall configurado. Portas 80, 443, 5810 e 5432 estão abertas."
-
+log $GREEN "Firewall configurado. Portas 80, 443, 5810, $PORT e $PORT_FRONT estão abertas."
 
 log $BLUE "Configuração do servidor concluída com sucesso."
