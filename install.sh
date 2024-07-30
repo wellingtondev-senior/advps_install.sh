@@ -54,7 +54,7 @@ sudo netstat -tuln | grep ':80\|:443'
 log $GREEN "NGINX instalado e em execução com sucesso."
 
 # Configuração do diretório do projeto e execução do Docker
-PROJECT_DIR="/opt/devcloud.com"
+PROJECT_DIR="/opt/devcloud/api.devcloud.top"
 REPO_URL="git@github.com:wellingtondev-senior/api.wellingtondev.com.git"
 
 # Criar o diretório do projeto e clonar o repositório
@@ -186,6 +186,42 @@ sudo systemctl restart postgresql
 
 log $GREEN "PostgreSQL instalado e configurado com sucesso."
 
+
+# Configuração do diretório do projeto e execução do Docker
+PROJECT_DIR_FRONT="/opt/devcloud/devcloud.top"
+REPO_URL_FRONT="git@github.com:wellingtondev-senior/devcloud.top.git"
+
+# Criar o diretório do projeto e clonar o repositório
+log $YELLOW "Criando o diretório do projeto e clonando o repositório..."
+sudo mkdir -p $PROJECT_DIR_FRONT
+sudo git clone $REPO_URL $PROJECT_DIR_FRONT
+
+# Garantir que o diretório do projeto pertença ao usuário atual
+sudo chown -R $USER:$USER $PROJECT_DIR_FRONT
+
+# Entrar no diretório do projeto
+log $YELLOW "Entrando no diretório do projeto..."
+cd $PROJECT_DIR_FRONT
+
+if [ ! -f "$PROJECT_DIR_FRONT/package.json" ]; then
+    log $RED "Erro: O arquivo package.json não foi encontrado no diretório $PROJECT_DIR_FRONT."
+    exit 1
+fi
+
+# Instalar dependências e construir o projeto
+log $YELLOW "Instalando dependências do projeto..."
+npm install
+
+log $YELLOW "Construindo o projeto..."
+npm run build
+
+log $YELLOW "Iniciando o projeto com PM2..."
+# Iniciar o projeto com PM2 e definir o nome da aplicação como "app"
+pm2 start npm --name "app" -- start
+
+# Salvar o estado do PM2
+pm2 save
+
 # Configurar firewall
 log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443, 5810 e 5432..."
 sudo ufw allow 80/tcp
@@ -198,5 +234,6 @@ log $YELLOW "Verificando status do firewall..."
 sudo ufw status
 
 log $GREEN "Firewall configurado. Portas 80, 443, 5810 e 5432 estão abertas."
+
 
 log $BLUE "Configuração do servidor concluída com sucesso."
