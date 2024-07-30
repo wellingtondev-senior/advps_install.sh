@@ -36,7 +36,9 @@ sudo apt-get install -y \
     curl \
     software-properties-common \
     git \
-    ufw
+    ufw \
+    certbot \
+    python3-certbot-nginx
 
 # Atualizar pacotes e instalar NGINX
 log $YELLOW "Atualizando pacotes e instalando NGINX..."
@@ -119,24 +121,6 @@ pm2 save
 
 log $GREEN "NVM, Node.js LTS e PM2 instalados e configurados com sucesso."
 
-# Função para encontrar uma porta disponível
-find_available_port() {
-    local PORT
-    for PORT in $(seq 3000 4000); do
-        if ! sudo lsof -i -P -n | grep LISTEN | grep -q ":$PORT"; then
-            echo $PORT
-            return
-        fi
-    done
-    echo "Nenhuma porta disponível encontrada."
-    exit 1
-}
-
-# Encontrar uma porta disponível e iniciar o projeto
-PORT=$(find_available_port)
-
-log $YELLOW "Atribuindo a porta $PORT para a aplicação..."
-
 # Verificar se o arquivo package.json existe
 if [ ! -f "$PROJECT_DIR/package.json" ]; then
     log $RED "Erro: O arquivo package.json não foi encontrado no diretório $PROJECT_DIR."
@@ -149,6 +133,20 @@ npm install
 
 log $YELLOW "Construindo o projeto..."
 npm run build
+
+# Função para encontrar uma porta disponível
+find_available_port() {
+    local port=3000
+    while sudo lsof -i -P -n | grep LISTEN | grep ":$port " >/dev/null; do
+        ((port++))
+    done
+    echo $port
+}
+
+# Encontrar uma porta disponível e iniciar o projeto
+PORT=$(find_available_port)
+
+log $YELLOW "Atribuindo a porta $PORT para a aplicação..."
 
 log $YELLOW "Iniciando o projeto com PM2 na porta $PORT..."
 # Iniciar o projeto com PM2 e definir o nome da aplicação como "app"
@@ -220,6 +218,7 @@ sudo chown -R $USER:$USER $PROJECT_DIR_FRONT
 log $YELLOW "Entrando no diretório do projeto..."
 cd $PROJECT_DIR_FRONT
 
+# Verificar se o arquivo package.json existe
 if [ ! -f "$PROJECT_DIR_FRONT/package.json" ]; then
     log $RED "Erro: O arquivo package.json não foi encontrado no diretório $PROJECT_DIR_FRONT."
     exit 1
@@ -232,43 +231,97 @@ npm install
 log $YELLOW "Construindo o projeto..."
 npm run build
 
-# Encontrar uma porta disponível e iniciar o projeto
-PORT_FRONT=$(find_available_port)
-
-log $YELLOW "Atribuindo a porta $PORT_FRONT para a aplicação..."
-
-log $YELLOW "Iniciando o projeto com PM2 na porta $PORT_FRONT..."
-# Iniciar o projeto com PM2 e definir o nome da aplicação como "app-front"
-PORT=$PORT_FRONT pm2 start npm --name "app-front" -- start
+# Iniciar o front-end com PM2
+log $YELLOW "Iniciando o front-end com PM2 na porta 5810..."
+pm2 start npm --name "frontend" -- start
 
 # Salvar o estado do PM2
 pm2 save
 
-# Configurar firewall
-log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443, 5810, $PORT e $PORT_FRONT..."
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 5810/tcp
-sudo ufw allow $PORT/tcp
-sudo ufw allow $PORT_FRONT/tcp
-sudo ufw allow 5432/tcp
+# Configurar NGINX para o front-end e a API
 
-# Verificar o status do firewall
-log $YELLOW "Verificando status do firewall..."
-sudo ufw status
+log $YELLOW "Configurando NGINX para devcloud.top e api.devcloud.top..."
 
-# Informações finais no log
-log $GREEN "A aplicação API está rodando na URL: http://$(hostname -I | awk '{print $1}'):$PORT"
-log $GREEN "A aplicação Front-End está rodando na URL: http://$(hostname -I | awk '{print $1}'):$PORT_FRONT"
+# Configuração NGINX para devcloud.top
+NGINX_CONF_DEV="/etc/nginx/sites-available/devcloud.top"
+sudo bash -c "cat > $NGINX_CONF_DEV" <<EOL
+server {
+    listen 80;
+    listen [::]:80;
+    server_name devcloud.top www.devcloud.top;
+    return 301 https://\$host\$request_uri;
+}
 
-# Credenciais do PostgreSQL
-log $GREEN "Credenciais do PostgreSQL:"
-log $GREEN "Usuário: wellingtondev"
-log $GREEN "Senha: wellingtondev_app_db_456_"
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name devcloud.top www.devcloud.top;
 
-# Credenciais padrão do Front-End
-log $GREEN "Credenciais padrão do Front-End:"
-log $GREEN "Usuário: master"
-log $GREEN "Senha: master"
+    ssl_certificate /etc/letsencrypt/live/devcloud.top/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/devcloud.top/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-log $BLUE "Configuração do servidor concluída com sucesso."
+    root /opt/devcloud/devcloud.top;
+
+    index index.html index.htm index.nginx-debian.html;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOL
+
+# Configuração NGINX para api.devcloud.top
+NGINX_CONF_API="/etc/nginx/sites-available/api.devcloud.top"
+sudo bash -c "cat > $NGINX_CONF_API" <<EOL
+server {
+    listen 80;
+    listen [::]:80;
+    server_name api.devcloud.top;
+    return 301 https://\$host\$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name api.devcloud.top;
+
+    ssl_certificate /etc/letsencrypt/live/api.devcloud.top/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/api.devcloud.top/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        proxy_pass http://localhost:5810;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_cache_bypass \$http_upgrade;
+    }
+}
+EOL
+
+# Habilitar as configurações NGINX
+sudo ln -s /etc/nginx/sites-available/devcloud.top /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/api.devcloud.top /etc/nginx/sites-enabled/
+
+# Reiniciar o NGINX
+log $YELLOW "Reiniciando o NGINX..."
+sudo systemctl restart nginx
+
+# Exibir as credenciais de acesso padrão
+log $GREEN "Configuração concluída. Credenciais de acesso padrão:"
+log $GREEN "PostgreSQL:"
+log $GREEN "  Username: postgres"
+log $GREEN "  Password: admin#master23451"
+log $GREEN "Aplicação:"
+log $GREEN "  Username: master"
+log $GREEN "  Password: master"
+
+# URLs de acesso
+log $GREEN "Acesse a aplicação em: https://devcloud.top"
+log $GREEN "Acesse a API em: https://api.devcloud.top"
+
+log $GREEN "Script de configuração concluído com sucesso."
