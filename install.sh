@@ -155,16 +155,21 @@ log $YELLOW "Configurando PostgreSQL..."
 log $YELLOW "Alterando a senha do usuário padrão postgres..."
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'admin#master23451';"
 
-# Criar banco de dados e usuário
+# Criar banco de dados e usuário (tratando erros se já existirem)
 log $YELLOW "Criando banco de dados e usuário..."
-sudo -u postgres psql -c "CREATE DATABASE wellingtondev;"
-sudo -u postgres psql -c "CREATE USER wellingtondev WITH ENCRYPTED PASSWORD 'wellingtondev_app_db_456_';"
+sudo -u postgres psql -c "CREATE DATABASE wellingtondev;" 2>/dev/null
+sudo -u postgres psql -c "CREATE USER wellingtondev WITH ENCRYPTED PASSWORD 'wellingtondev_app_db_456_';" 2>/dev/null
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE wellingtondev TO wellingtondev;"
+
+# Verificar versão do PostgreSQL para ajustar caminhos de configuração
+PG_VERSION=$(pg_lsclusters -h | grep online | awk '{print $1}')
+PG_CONF="/etc/postgresql/$PG_VERSION/main/postgresql.conf"
+PG_HBA="/etc/postgresql/$PG_VERSION/main/pg_hba.conf"
 
 # Permitir conexões externas ao PostgreSQL
 log $YELLOW "Configurando PostgreSQL para aceitar conexões externas..."
-sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/12/main/postgresql.conf
-echo "host all all 0.0.0.0/0 md5" | sudo tee -a /etc/postgresql/12/main/pg_hba.conf
+sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" $PG_CONF
+echo "host all all 0.0.0.0/0 md5" | sudo tee -a $PG_HBA
 
 # Reiniciar o serviço PostgreSQL para aplicar as mudanças
 log $YELLOW "Reiniciando o serviço PostgreSQL..."
