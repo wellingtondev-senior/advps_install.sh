@@ -42,26 +42,10 @@ fix_ssl_config() {
 }
 
 # Verificar e corrigir o arquivo de opções SSL/TLS do Certbot
-if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ] || grep -q "<!DOCTYPE" /etc/letsencrypt/options-ssl-nginx.conf; then
+if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ] || ! grep -q "ssl_protocols" /etc/letsencrypt/options-ssl-nginx.conf; then
     log $RED "Arquivo /etc/letsencrypt/options-ssl-nginx.conf não encontrado ou corrompido. Baixando novamente..."
     sudo mkdir -p /etc/letsencrypt
     fix_ssl_config "$SSL_CONFIG_URL" "/etc/letsencrypt/options-ssl-nginx.conf"
-fi
-
-# Verificar a integridade do arquivo SSL/TLS
-if ! sudo nginx -t; then
-    log $RED "Erro na configuração do NGINX. Abortando."
-    exit 1
-fi
-
-# Gerar parâmetros DH (se ainda não existir)
-log $YELLOW "Gerando parâmetros DH..."
-if [ ! -f "/etc/letsencrypt/ssl-dhparams.pem" ]; then
-    sudo openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
-    if [ $? -ne 0 ]; then
-        log $RED "Erro ao gerar os parâmetros DH. Abortando."
-        exit 1
-    fi
 fi
 
 # Configuração do NGINX para o frontend e a API
