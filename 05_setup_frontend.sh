@@ -65,7 +65,7 @@ pm2 start npm --name devcloud --  start
 # Instalar e configurar o firewall para permitir a porta dinâmica
 log $YELLOW "Instalando e configurando o firewall..."
 
-sudo ufw enable
+yes | sudo ufw enable
 # Permitir a porta dinâmica no firewall
 sudo ufw allow 3999/tcp
 
@@ -79,5 +79,5 @@ log $GREEN "Configuração concluída com sucesso!"
 # Finalizar
  log $GREEN "###########################################################"
  log $GREEN "Aplicação FrontEnd:"
- log $GREEN "Acesse a FrontEnd em: http://$IP:$PORT"
+ log $GREEN "Acesse a FrontEnd em: http://$IP:3999"
  log $GREEN "###########################################################"
