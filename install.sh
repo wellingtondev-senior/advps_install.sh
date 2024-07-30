@@ -257,6 +257,18 @@ sudo ufw allow 5432/tcp
 log $YELLOW "Verificando status do firewall..."
 sudo ufw status
 
-log $GREEN "Firewall configurado. Portas 80, 443, 5810, $PORT e $PORT_FRONT estão abertas."
+# Informações finais no log
+log $GREEN "A aplicação API está rodando na URL: http://$(hostname -I | awk '{print $1}'):$PORT"
+log $GREEN "A aplicação Front-End está rodando na URL: http://$(hostname -I | awk '{print $1}'):$PORT_FRONT"
+
+# Credenciais do PostgreSQL
+log $GREEN "Credenciais do PostgreSQL:"
+log $GREEN "Usuário: wellingtondev"
+log $GREEN "Senha: wellingtondev_app_db_456_"
+
+# Credenciais padrão do Front-End
+log $GREEN "Credenciais padrão do Front-End:"
+log $GREEN "Usuário: master"
+log $GREEN "Senha: master"
 
 log $BLUE "Configuração do servidor concluída com sucesso."
