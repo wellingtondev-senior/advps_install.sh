@@ -69,13 +69,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Executar o script de configuração do domínio (NGINX)
-log $YELLOW "Executando o script de configuração do domínio (NGINX)..."
-bash "$CONFIGURAR_DOMINIO_SCRIPT"
-if [ $? -ne 0 ]; then
-    log $RED "Erro ao executar o script de configuração do domínio (NGINX). Abortando."
-    exit 1
-fi
+
 
 # Executar o script de instalação do Node.js e PM2
 log $YELLOW "Executando o script de instalação do Node.js e PM2..."
@@ -101,6 +95,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Executar o script de configuração do domínio (NGINX)
+log $YELLOW "Executando o script de configuração do domínio (NGINX)..."
+bash "$CONFIGURAR_DOMINIO_SCRIPT"
+if [ $? -ne 0 ]; then
+    log $RED "Erro ao executar o script de configuração do domínio (NGINX). Abortando."
+    exit 1
+fi
 # Executar o script de instalação do PostgreSQL
 log $YELLOW "Executando o script de instalação do PostgreSQL..."
 bash "$SETUP_POSTGRES_SCRIPT"
