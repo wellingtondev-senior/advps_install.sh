@@ -5,9 +5,9 @@
 # Autor: [Seu Nome]
 # Data: [Data de Criação]
 # Descrição: Este script instala e configura NGINX, Docker e Docker Compose,
-#            além do NVM, Node.js LTS, PM2 e PostgreSQL em uma máquina Ubuntu 20.04.
+#            além do NVM, Node.js LTS e PM2 em uma máquina Ubuntu 20.04. 
 #            Inclui a atualização dos pacotes, a adição de repositórios necessários,
-#            a instalação de dependências e a configuração de serviços para serem
+#            a instalação de dependências e a configuração de serviços para serem 
 #            executados automaticamente.
 ################################################################################
 
@@ -139,47 +139,13 @@ pm2 start npm --name "app" -- start
 # Salvar o estado do PM2
 pm2 save
 
-# Instalar PostgreSQL
-log $YELLOW "Instalando PostgreSQL..."
-sudo apt-get install -y postgresql postgresql-contrib
-
-# Iniciar o serviço PostgreSQL
-log $YELLOW "Iniciando o serviço PostgreSQL..."
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-
-# Configurar PostgreSQL
-log $YELLOW "Configurando PostgreSQL..."
-
-# Alterar a senha do usuário postgres padrão
-log $YELLOW "Alterando a senha do usuário padrão postgres..."
-sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'admin#master23451';"
-
-# Criar banco de dados e usuário
-log $YELLOW "Criando banco de dados e usuário..."
-sudo -u postgres psql -c "CREATE DATABASE wellingtondev;"
-sudo -u postgres psql -c "CREATE USER wellingtondev WITH ENCRYPTED PASSWORD 'wellingtondev_app_db_456_';"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE wellingtondev TO wellingtondev;"
-
-# Permitir conexões externas ao PostgreSQL
-log $YELLOW "Configurando PostgreSQL para aceitar conexões externas..."
-sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/12/main/postgresql.conf
-echo "host all all 0.0.0.0/0 md5" | sudo tee -a /etc/postgresql/12/main/pg_hba.conf
-
-# Reiniciar o serviço PostgreSQL para aplicar as mudanças
-log $YELLOW "Reiniciando o serviço PostgreSQL..."
-sudo systemctl restart postgresql
-
-log $GREEN "PostgreSQL instalado e configurado com sucesso."
-
 # Configurar firewall
-log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443, 5810 e 5432..."
+log $YELLOW "Configurando o firewall para permitir tráfego nas portas 80, 443 e 5810..."
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 5810/tcp
-sudo ufw allow 5432/tcp
 sudo ufw --force enable
 
-log $GREEN "Firewall configurado. Portas 80, 443, 5810 e 5432 estão abertas."
+log $GREEN "Firewall configurado. Portas 80, 443 e 5810 estão abertas."
 
 log $BLUE "Configuração do servidor concluída com sucesso."
