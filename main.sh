@@ -26,11 +26,11 @@ log $BLUE "Iniciando o script principal para configuração do servidor e projet
 
 # URLs para os scripts individuais
 INSTALL_DEPENDENCIAS="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/01_install_dependencies.sh"
-CONFIGUAR_DOMINIO="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_configure_nginx.sh"
-NODE_PM2_INSTALL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
-SETUP_API="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
-SETUP_FRONTEND="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
-SETUP_POSTGRES="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
+CONFIGUAR_DOMINIO="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_configurar_dominio.sh"
+NODE_PM2_INSTALL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_install_nvm_node_pm2.sh"
+SETUP_API="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/04_setup_api.sh"
+SETUP_FRONTEND="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/05_setup_frontend.sh"
+SETUP_POSTGRES="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/06_install_postgresql.sh"
 
 # Caminho para os scripts temporários
 INSTALL_SCRIPT="./01_install_dependencies.sh"
