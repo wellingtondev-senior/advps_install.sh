@@ -15,6 +15,14 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # Sem cor
 
+
+#!/bin/bash
+
+# Obtém o IP público da VPS
+IP=$(curl -s https://ipinfo.io/ip)
+
+# Exibe o IP (opcional)
+
 # Função de log para imprimir mensagens com timestamps e cores
 log() {
     local color=$1
@@ -92,3 +100,9 @@ sudo ufw enable
 sudo ufw status
 
 log $GREEN "Configuração concluída com sucesso!"
+
+# Finalizar
+ log $GREEN "###########################################################"
+ log $GREEN "Aplicação API:"
+ log $GREEN "Acesse a API em: http://$IP:$PORT"
+ log $GREEN "###########################################################"
