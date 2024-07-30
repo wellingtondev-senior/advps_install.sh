@@ -18,7 +18,6 @@ NC='\033[0m' # Sem cor
 DOMINIO_FRONTEND='devcloud.top'
 DOMINIO_API='api.devcloud.top'
 SSL_CONFIG_URL="https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/options-ssl-nginx.conf"
-SSL_CONFIG_SCRIPT="./07_ssl.sh"
 
 # Função de log para imprimir mensagens com timestamps e cores
 log() {
