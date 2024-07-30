@@ -9,6 +9,9 @@
 #             usando certificados Let's Encrypt e Cloudflare.
 ################################################################################
 
+# Ativar o modo de falha rápida
+set -e
+
 # Cores para log
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -40,10 +43,6 @@ fix_ssl_config() {
     local dest=$2
     log $YELLOW "Baixando configuração SSL/TLS de: $url"
     curl -s -o "$dest" "$url"
-    if [ $? -ne 0 ]; then
-        log $RED "Erro ao baixar a configuração SSL/TLS de $url"
-        exit 1
-    fi
     log $GREEN "Configuração SSL/TLS baixada e substituída com sucesso."
 }
 
@@ -52,10 +51,7 @@ install_dependencies() {
     log $BLUE "Instalando dependências..."
     apt-get update
     apt-get install -y curl jq nginx python3-certbot-nginx
-    if [ $? -ne 0 ]; then
-        log $RED "Erro ao instalar dependências. Abortando."
-        exit 1
-    fi
+    log $GREEN "Dependências instaladas com sucesso."
 }
 
 # Função para obter certificado do Cloudflare
@@ -70,20 +66,21 @@ get_cloudflare_cert() {
     PRIVATE_KEY=$(echo $CERT_RESPONSE | jq -r '.result[0].private_key')
 
     if [[ -z "$CERTIFICATE" || -z "$PRIVATE_KEY" ]]; then
-      log $RED "Falha ao obter o certificado SSL do Cloudflare."
-      exit 1
+        log $RED "Falha ao obter o certificado SSL do Cloudflare."
+        exit 1
     fi
 
     echo "$CERTIFICATE" > /etc/ssl/certs/cloudflare.crt
     echo "$PRIVATE_KEY" > /etc/ssl/private/cloudflare.key
     chmod 600 /etc/ssl/private/cloudflare.key
+    log $GREEN "Certificado Cloudflare instalado com sucesso."
 }
 
 # Função para configurar o NGINX
 configure_nginx() {
     log $YELLOW "Configurando o NGINX para $DOMINIO_FRONTEND e $DOMINIO_API..."
 
-    sudo tee /etc/nginx/sites-available/devcloud.top > /dev/null <<EOF
+    cat <<EOF | sudo tee /etc/nginx/sites-available/devcloud.top > /dev/null
 server {
     listen 80;
     server_name $DOMINIO_FRONTEND;
@@ -116,7 +113,7 @@ server {
 }
 EOF
 
-    sudo tee /etc/nginx/sites-available/api.devcloud.top > /dev/null <<EOF
+    cat <<EOF | sudo tee /etc/nginx/sites-available/api.devcloud.top > /dev/null
 server {
     listen 80;
     server_name $DOMINIO_API;
@@ -142,36 +139,24 @@ server {
 }
 EOF
 
-    # Habilitar as configurações NGINX
-    sudo ln -s /etc/nginx/sites-available/devcloud.top /etc/nginx/sites-enabled/
-    sudo ln -s /etc/nginx/sites-available/api.devcloud.top /etc/nginx/sites-enabled/
+    sudo ln -sf /etc/nginx/sites-available/devcloud.top /etc/nginx/sites-enabled/
+    sudo ln -sf /etc/nginx/sites-available/api.devcloud.top /etc/nginx/sites-enabled/
+    log $GREEN "Configuração do NGINX concluída."
 }
 
 # Função para reiniciar o NGINX
 restart_nginx() {
     log $YELLOW "Testando e reiniciando o NGINX..."
     sudo nginx -t
-    if [ $? -ne 0 ]; then
-        log $RED "Erro na configuração do NGINX. Abortando."
-        exit 1
-    fi
-
     sudo systemctl restart nginx
+    log $GREEN "NGINX reiniciado com sucesso."
 }
 
 # Main
 install_dependencies
-
-# Obter e instalar certificados do Cloudflare
 get_cloudflare_cert
-
-# Corrigir e garantir a configuração SSL/TLS
 fix_ssl_config "$SSL_CONFIG_URL" "/etc/letsencrypt/options-ssl-nginx.conf"
-
-# Configurar NGINX
 configure_nginx
-
-# Reiniciar NGINX
 restart_nginx
 
 log $GREEN "NGINX configurado e em execução com sucesso."
