@@ -26,7 +26,6 @@ log $BLUE "Iniciando o script principal para configuração do servidor e projet
 
 # URLs para os scripts individuais
 INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/01_install_dependencies.sh"
-CONFIGURAR_DOMINIO_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_dominio.sh"
 NODE_PM2_INSTALL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_install_nvm_node_pm2.sh"
 SETUP_API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/04_setup_api.sh"
 SETUP_FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/05_setup_frontend.sh"
@@ -34,7 +33,6 @@ SETUP_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps
 
 # Caminho para os scripts temporários
 INSTALL_SCRIPT="./01_install_dependencies.sh"
-CONFIGURAR_DOMINIO_SCRIPT="./02_dominio.sh"
 NODE_PM2_INSTALL_SCRIPT="./03_install_nvm_node_pm2.sh"
 SETUP_API_SCRIPT="./04_setup_api.sh"
 SETUP_FRONTEND_SCRIPT="./05_setup_frontend.sh"
@@ -55,7 +53,6 @@ download_script() {
 
 # Baixar e executar os scripts individuais
 download_script "$INSTALL_DEPENDENCIAS_URL" "$INSTALL_SCRIPT"
-download_script "$CONFIGURAR_DOMINIO_URL" "$CONFIGURAR_DOMINIO_SCRIPT"
 download_script "$NODE_PM2_INSTALL_URL" "$NODE_PM2_INSTALL_SCRIPT"
 download_script "$SETUP_API_URL" "$SETUP_API_SCRIPT"
 download_script "$SETUP_FRONTEND_URL" "$SETUP_FRONTEND_SCRIPT"
@@ -95,13 +92,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Executar o script de configuração do domínio (NGINX)
-log $YELLOW "Executando o script de configuração do domínio (NGINX)..."
-bash "$CONFIGURAR_DOMINIO_SCRIPT"
-if [ $? -ne 0 ]; then
-    log $RED "Erro ao executar o script de configuração do domínio (NGINX). Abortando."
-    exit 1
-fi
+
 # Executar o script de instalação do PostgreSQL
 log $YELLOW "Executando o script de instalação do PostgreSQL..."
 bash "$SETUP_POSTGRES_SCRIPT"
