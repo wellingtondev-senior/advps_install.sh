@@ -41,11 +41,17 @@ fix_ssl_config() {
     log $GREEN "Configuração SSL/TLS baixada e substituída com sucesso."
 }
 
-# Verificar se o arquivo de opções SSL/TLS do Certbot existe e está correto
+# Verificar e corrigir o arquivo de opções SSL/TLS do Certbot
 if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ] || grep -q "<!DOCTYPE" /etc/letsencrypt/options-ssl-nginx.conf; then
     log $RED "Arquivo /etc/letsencrypt/options-ssl-nginx.conf não encontrado ou corrompido. Baixando novamente..."
     sudo mkdir -p /etc/letsencrypt
     fix_ssl_config "$SSL_CONFIG_URL" "/etc/letsencrypt/options-ssl-nginx.conf"
+fi
+
+# Verificar a integridade do arquivo SSL/TLS
+if ! sudo nginx -t; then
+    log $RED "Erro na configuração do NGINX. Abortando."
+    exit 1
 fi
 
 # Gerar parâmetros DH (se ainda não existir)
