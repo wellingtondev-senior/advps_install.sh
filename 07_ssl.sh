@@ -49,6 +49,12 @@ if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ]; then
         log $RED "Erro ao baixar a configuração padrão do SSL/TLS. Abortando."
         exit 1
     fi
+    
+    # Verificar se o arquivo baixado contém conteúdo válido
+    if grep -q "<!DOCTYPE" /etc/letsencrypt/options-ssl-nginx.conf; then
+        log $RED "O arquivo baixado contém conteúdo inválido. Abortando."
+        exit 1
+    fi
 fi
 
 # Gerar parâmetros DH (se ainda não existir)
