@@ -26,7 +26,7 @@ log $BLUE "Iniciando o script principal para configuração do servidor e projet
 
 # URLs para os scripts individuais
 INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/01_install_dependencies.sh"
-CONFIGURAR_DOMINIO_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_configurar_dominio.sh"
+CONFIGURAR_DOMINIO_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_dominio.sh"
 NODE_PM2_INSTALL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_install_nvm_node_pm2.sh"
 SETUP_API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/04_setup_api.sh"
 SETUP_FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/05_setup_frontend.sh"
