@@ -25,9 +25,12 @@ log() {
 log $BLUE "Iniciando o script principal para configuração do servidor e projeto..."
 
 # URLs para os scripts individuais
-INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/01_install_dependencies.sh"
-NGINX_SCRIPT_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_configure_nginx.sh"
-PROJECT_SCRIPT_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
+INSTALL_DEPENDENCIAS="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/01_install_dependencies.sh"
+CONFIGUAR_DOMINIO="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/02_configure_nginx.sh"
+NODE_PM2_INSTALL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
+SETUP_API="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
+SETUP_FRONTEND="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
+SETUP_POSTGRES="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_setup_project.sh"
 
 # Caminho para os scripts temporários
 INSTALL_SCRIPT="./01_install_dependencies.sh"
@@ -77,3 +80,15 @@ if [ $? -ne 0 ]; then
 fi
 
 log $GREEN "Todos os scripts foram executados com sucesso. Configuração concluída."
+log $GREEN "#############################################################################"
+log $GREEN "Configuração concluída. Credenciais de acesso padrão:"
+log $GREEN "PostgreSQL:"
+log $GREEN "  Username: postgres"
+log $GREEN "  Password: admin#master23451"
+log $GREEN "Aplicação:"
+log $GREEN "  Username: master"
+log $GREEN "  Password: master"
+log $GREEN "Acesse a aplicação em: https://devcloud.top"
+log $GREEN "Acesse a API em: https://api.devcloud.top"
+log $GREEN "Script de configuração concluído com sucesso."
+log $GREEN "#############################################################################"
