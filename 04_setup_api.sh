@@ -62,20 +62,11 @@ log $YELLOW "Construindo o projeto..."
 npm run build
 
 # Função para verificar se a porta está disponível
-check_port() {
-    local port=$1
-    nc -z localhost $port > /dev/null 2>&1
-    return $?
-}
 
 # Selecionar uma porta dinâmica disponível
-PORT=$(shuf -i 3000-9000 -n 1)
+PORT=58510
 
 # Verificar se a porta está disponível
-while ! check_port $PORT; do
-    log $YELLOW "Porta $PORT está em uso, selecionando outra porta..."
-    PORT=$(shuf -i 3000-9000 -n 1)
-done
 
 log $YELLOW "Porta dinâmica selecionada: $PORT"
 
