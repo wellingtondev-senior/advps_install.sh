@@ -51,4 +51,5 @@ else
     log $RED "Arquivo de configuração do PostgreSQL não encontrado: $PG_HBA"
 fi
 
-log $YELLOW "Reiniciando o serviço
+log $YELLOW "Reiniciando o serviço PostgreSQL..."
+sudo systemctl restart postgresql
