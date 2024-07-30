@@ -29,7 +29,7 @@ log $YELLOW "Configurando PostgreSQL..."
 log $YELLOW "Alterando a senha do usuário padrão postgres..."
 sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'admin#master23451';"
 
-log $YELLOW "Criando banco de dados e usuário..."
+log $YELLOW "Criando banco de dados e usuário..."  
 sudo -u postgres psql -c "CREATE DATABASE wellingtondev;" 2>/dev/null
 sudo -u postgres psql -c "CREATE USER wellingtondev WITH ENCRYPTED PASSWORD 'wellingtondev_app_db_456_';" 2>/dev/null
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE wellingtondev TO wellingtondev;"
