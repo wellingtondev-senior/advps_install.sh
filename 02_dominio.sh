@@ -17,7 +17,7 @@ NC='\033[0m' # Sem cor
 
 DOMINIO_FRONTEND='devcloud.top'
 DOMINIO_API='api.devcloud.top'
-SSL_CONFIG_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/06_install_postgresql.sh"
+SSL_CONFIG_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/07_ssl.sh"
 
 
 SSL_CONFIG_SCRIPT="./07_ssl.sh"
