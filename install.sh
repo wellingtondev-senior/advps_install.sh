@@ -168,8 +168,17 @@ PG_HBA="/etc/postgresql/$PG_VERSION/main/pg_hba.conf"
 
 # Permitir conexões externas ao PostgreSQL
 log $YELLOW "Configurando PostgreSQL para aceitar conexões externas..."
-sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" $PG_CONF
-echo "host all all 0.0.0.0/0 md5" | sudo tee -a $PG_HBA
+if [ -f "$PG_CONF" ]; then
+    sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" $PG_CONF
+else
+    log $RED "Arquivo de configuração do PostgreSQL não encontrado: $PG_CONF"
+fi
+
+if [ -f "$PG_HBA" ]; then
+    echo "host all all 0.0.0.0/0 md5" | sudo tee -a $PG_HBA
+else
+    log $RED "Arquivo de configuração do PostgreSQL não encontrado: $PG_HBA"
+fi
 
 # Reiniciar o serviço PostgreSQL para aplicar as mudanças
 log $YELLOW "Reiniciando o serviço PostgreSQL..."
@@ -183,7 +192,10 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 5810/tcp
 sudo ufw allow 5432/tcp
-sudo ufw --force enable
+
+# Verificar o status do firewall
+log $YELLOW "Verificando status do firewall..."
+sudo ufw status
 
 log $GREEN "Firewall configurado. Portas 80, 443, 5810 e 5432 estão abertas."
 
