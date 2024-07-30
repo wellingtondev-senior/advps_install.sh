@@ -34,7 +34,7 @@ SETUP_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps
 
 # Caminho para os scripts temporários
 INSTALL_SCRIPT="./01_install_dependencies.sh"
-CONFIGURAR_DOMINIO_SCRIPT="./02_configurar_dominio.sh"
+CONFIGURAR_DOMINIO_SCRIPT="./02_dominio.sh"
 NODE_PM2_INSTALL_SCRIPT="./03_install_nvm_node_pm2.sh"
 SETUP_API_SCRIPT="./04_setup_api.sh"
 SETUP_FRONTEND_SCRIPT="./05_setup_frontend.sh"
