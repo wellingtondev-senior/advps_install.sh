@@ -14,11 +14,6 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # Sem cor
-
-
-#!/bin/bash
-
-# Obtém o IP público da VPS
 IP=$(curl -s https://ipinfo.io/ip)
 
 # Exibe o IP (opcional)
@@ -61,18 +56,13 @@ npm install
 log $YELLOW "Construindo o projeto..."
 npm run build
 
-# Função para verificar se a porta está disponível
 
-# Selecionar uma porta dinâmica disponível
-PORT=58510
 
 # Verificar se a porta está disponível
 
-log $YELLOW "Porta dinâmica selecionada: $PORT"
 
 # Atualizar o arquivo de configuração para usar a porta dinâmica
 # Supondo que você tenha um arquivo .env para definir variáveis de ambiente
-echo "PORT=$PORT" > .env
 
 log $YELLOW "Iniciando o projeto com PM2..."
 # Iniciar o projeto com PM2 e definir o nome da aplicação como "api"
@@ -82,7 +72,7 @@ pm2 start npm --name api_devcloud -- run start:prod
 log $YELLOW "Instalando e configurando o firewall..."
 
 # Permitir a porta dinâmica no firewall
-sudo ufw allow $PORT/tcp
+sudo ufw allow 58551/tcp
 
 # Habilitar o firewall, se ainda não estiver habilitado
 sudo ufw enable
@@ -95,5 +85,5 @@ log $GREEN "Configuração concluída com sucesso!"
 # Finalizar
  log $GREEN "###########################################################"
  log $GREEN "Aplicação API:"
- log $GREEN "Acesse a API em: http://$IP:$PORT"
+ log $GREEN "Acesse a API em: http://$IP:58551"
  log $GREEN "###########################################################"
