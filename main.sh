@@ -101,16 +101,3 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-log $GREEN "Todos os scripts foram executados com sucesso. Configuração concluída."
-log $GREEN "#############################################################################"
-log $GREEN "Configuração concluída. Credenciais de acesso padrão:"
-log $GREEN "PostgreSQL:"
-log $GREEN "  Username: postgres"
-log $GREEN "  Password: admin#master23451"
-log $GREEN "Aplicação:"
-log $GREEN "  Username: master"
-log $GREEN "  Password: master"
-log $GREEN "Acesse a aplicação em: https://devcloud.top"
-log $GREEN "Acesse a API em: https://api.devcloud.top"
-log $GREEN "Script de configuração concluído com sucesso."
-log $GREEN "#############################################################################"

@@ -51,5 +51,10 @@ else
     log $RED "Arquivo de configuração do PostgreSQL não encontrado: $PG_HBA"
 fi
 
+log $YELLOW "Instalando e configurando o firewall..."
+
+# Permitir a porta dinâmica no firewall
+sudo ufw allow 5432/tcp
+
 log $YELLOW "Reiniciando o serviço PostgreSQL..."
 sudo systemctl restart postgresql
