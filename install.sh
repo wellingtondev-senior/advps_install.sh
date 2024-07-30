@@ -2,7 +2,7 @@
 
 ################################################################################
 # Script de Configuração de Servidor - Ubuntu 20.04
-# Autor: [Seu Nome]
+# Autor: Wellington Ramos
 # Data: [Data de Criação]
 # Descrição: Este script instala e configura NGINX, Docker e Docker Compose,
 #            além do NVM, Node.js LTS, PM2 e PostgreSQL em uma máquina Ubuntu 20.04.
