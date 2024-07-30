@@ -17,8 +17,7 @@ NC='\033[0m' # Sem cor
 
 DOMINIO_FRONTEND='devcloud.top'
 DOMINIO_API='api.devcloud.top'
-SSL_CONFIG_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/07_ssl.sh"
-
+SSL_CONFIG_URL="https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/options-ssl-nginx.conf"
 SSL_CONFIG_SCRIPT="./07_ssl.sh"
 
 # Função de log para imprimir mensagens com timestamps e cores
@@ -30,28 +29,32 @@ log() {
 
 log $BLUE "Iniciando a configuração do NGINX..."
 
-# Função para baixar o script de configuração SSL
-download_script() {
+# Função para baixar e substituir o arquivo de configuração SSL/TLS
+fix_ssl_config() {
     local url=$1
     local dest=$2
-    log $YELLOW "Baixando script de: $url"
+    log $YELLOW "Baixando configuração SSL/TLS de: $url"
     curl -s -o "$dest" "$url"
     if [ $? -ne 0 ]; then
-        log $RED "Erro ao baixar o script de $url"
+        log $RED "Erro ao baixar a configuração SSL/TLS de $url"
         exit 1
     fi
-    chmod +x "$dest"
+    log $GREEN "Configuração SSL/TLS baixada e substituída com sucesso."
 }
 
-# Verificar se o arquivo de opções SSL/TLS do Certbot existe
-if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ]; then
-    log $RED "Arquivo /etc/letsencrypt/options-ssl-nginx.conf não encontrado. Instalando ou reinstalando Certbot..."
-    # Baixar e executar o script de configuração SSL
-    download_script "$SSL_CONFIG_URL" "$SSL_CONFIG_SCRIPT"
-    log $YELLOW "Executando script de configuração SSL..."
-    bash "$SSL_CONFIG_SCRIPT"
+# Verificar se o arquivo de opções SSL/TLS do Certbot existe e está correto
+if [ ! -f "/etc/letsencrypt/options-ssl-nginx.conf" ] || grep -q "<!DOCTYPE" /etc/letsencrypt/options-ssl-nginx.conf; then
+    log $RED "Arquivo /etc/letsencrypt/options-ssl-nginx.conf não encontrado ou corrompido. Baixando novamente..."
+    sudo mkdir -p /etc/letsencrypt
+    fix_ssl_config "$SSL_CONFIG_URL" "/etc/letsencrypt/options-ssl-nginx.conf"
+fi
+
+# Gerar parâmetros DH (se ainda não existir)
+log $YELLOW "Gerando parâmetros DH..."
+if [ ! -f "/etc/letsencrypt/ssl-dhparams.pem" ]; then
+    sudo openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
     if [ $? -ne 0 ]; then
-        log $RED "Erro ao configurar o SSL. Abortando."
+        log $RED "Erro ao gerar os parâmetros DH. Abortando."
         exit 1
     fi
 fi
