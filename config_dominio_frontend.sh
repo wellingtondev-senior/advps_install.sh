@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ################################################################################
-# Script de Instalação e Configuração do NGINX com Cloudflare SSL
+# Script de Instalação e Configuração do NGINX
 # Autor: [Seu Nome]
 # Data: [Data de Criação]
 # Descrição: Este script configura o NGINX para o domínio especificado, 
