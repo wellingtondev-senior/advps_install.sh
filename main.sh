@@ -100,4 +100,21 @@ if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de instalação do PostgreSQL. Abortando."
     exit 1
 fi
-
+IP=$(curl -s https://ipinfo.io/ip)
+log $GREEN "Todos os scripts foram executados com sucesso. Configuração concluída."
+log $GREEN "#############################################################################"
+log $GREEN "Configuração concluída. Credenciais de acesso padrão:"
+log $GREEN "#############################################################################"
+log $GREEN "  PostgreSQL:"
+log $GREEN "  Username: postgres"
+log $GREEN "  Password: admin#master23451"
+log $GREEN "#############################################################################"
+log $GREEN "  Aplicação:"
+log $GREEN "#############################################################################"
+log $GREEN "  Username: master"
+log $GREEN "  Password: master"
+log $GREEN "#############################################################################"
+log $GREEN "Acesse a aplicação em: http://$IP:3999"
+log $GREEN "Acesse a API em: http://$IP:58551"
+log $GREEN "Script de configuração concluído com sucesso."
+log $GREEN "#############################################################################"
