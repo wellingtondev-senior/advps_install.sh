@@ -23,10 +23,10 @@ npm run build || error_exit "Erro: Falha ao executar npm run build."
 
 # Reiniciar a aplicação com pm2
 echo "Reiniciando a aplicação com pm2..."
-pm2 restart api.devcloud || error_exit "Erro: Falha ao reiniciar a aplicação com pm2."
+pm2 restart api_devcloud || error_exit "Erro: Falha ao reiniciar a aplicação com pm2."
 
 # Exibir logs da aplicação
 echo "Exibindo logs da aplicação..."
-pm2 log api.devcloud || error_exit "Erro: Falha ao exibir os logs da aplicação com pm2."
+pm2 log api_devcloud || error_exit "Erro: Falha ao exibir os logs da aplicação com pm2."
 
 echo "Script executado com sucesso!"
