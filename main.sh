@@ -1,13 +1,4 @@
 #!/bin/bash
-
-################################################################################
-# Script Principal para configuração do servidor e projeto
-# Autor: [Seu Nome]
-# Data: [Data de Criação]
-# Descrição: Este script baixa e executa os scripts individuais para configurar o servidor,
-#            o NGINX e o projeto.
-################################################################################
-
 # Cores para log
 RED='\033[0;31m'
 GREEN='\033[0;32m'
