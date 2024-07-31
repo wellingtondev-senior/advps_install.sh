@@ -28,7 +28,7 @@ log() {
 log $BLUE "Iniciando a configuração do BACKEND..."
 
 # Configuração do diretório do projeto e execução do Docker
-PROJECT_DIR="/var/www/devcloud/api.devcloud.top"
+PROJECT_DIR="/home/devcloud/api.devcloud.top"
 REPO_URL="git@github.com:wellingtondev-senior/api.wellingtondev.com.git"
 
 # Criar o diretório do projeto e clonar o repositório
