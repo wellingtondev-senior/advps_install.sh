@@ -4,7 +4,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
-SKY='\033[48;5;33m'
+SKY='\033[48;0;33m'
 NC='\033[0m' # Sem cor
 IP=$(curl -s https://ipinfo.io/ip)
 
