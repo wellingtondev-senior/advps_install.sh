@@ -30,7 +30,7 @@ log $SKY "######################################################################
 
 # URLs para os scripts individuais
 INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_dependencies.sh"
-INSTALL_NODE_PM2__URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_nvm_node_pm2.sh"
+INSTALL_NODE_PM2_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_nvm_node_pm2.sh"
 API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/api.sh"
 FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/frontend.sh"
 INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
