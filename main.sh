@@ -25,11 +25,15 @@ log() {
 }
 
 log $SKY "################################################################################"
-log $SKY "# Script Principal para configuração do servidor e projeto"
-log $SKY "# Autor: [Seu Nome]"
-log $SKY "# Data: [Data de Criação]"
-log $SKY "# Descrição: Este script baixa e executa os scripts individuais" 
-log $SKY "# para configurar o servidor, o NGINX e o projeto."
+log $SKY "#                                                                              #"
+log $SKY "#                           SCRIPT PRINCIPAL PARA CONFIGURAÇÃO                 #"
+log $SKY "#                        DO SERVIDOR E DO PROJETO                              #"
+log $SKY "#                                                                              #"
+log $SKY "# Autor: [Seu Nome]                                                            #"
+log $SKY "# Data: [Data de Criação]                                                      #"
+log $SKY "# Descrição: Este script baixa e executa scripts individuais                   #"
+log $SKY "#              para configurar o servidor, o NGINX e o projeto.                #"
+log $SKY "#                                                                              #"
 log $SKY "################################################################################"
 
 # URLs para os scripts individuais
