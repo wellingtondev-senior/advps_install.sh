@@ -59,14 +59,14 @@ npm run build
 # Supondo que você tenha um arquivo .env para definir variáveis de ambiente
 
 log $YELLOW "Iniciando o projeto com PM2..."
-# Iniciar o projeto com PM2 e definir o nome da aplicação como "devcloud"
-pm2 start npm --name devcloud -- start
+# Iniciar o projeto com PM2 e definir o nome da aplicação como "devcloud" e a porta 3999
+PORT=3999 pm2 start npm --name devcloud -- start
 
 # Instalar e configurar o firewall para permitir a porta 3999
 log $YELLOW "Instalando e configurando o firewall..."
 
 # Habilitar o firewall se ainda não estiver habilitado
-sudo ufw status | grep -q "Status: active" || sudo ufw enable
+sudo ufw status | grep -q "Status: active" || echo "y" | sudo ufw enable
 
 # Permitir a porta 3999 no firewall
 sudo ufw allow 3999/tcp
