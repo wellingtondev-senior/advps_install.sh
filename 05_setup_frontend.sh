@@ -14,9 +14,9 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # Sem cor
-IP=$(curl -s https://ipinfo.io/ip)
 
-# Exibe o IP (opcional)
+# Obter IP público
+IP=$(curl -s https://ipinfo.io/ip)
 
 # Função de log para imprimir mensagens com timestamps e cores
 log() {
@@ -59,17 +59,17 @@ npm run build
 # Supondo que você tenha um arquivo .env para definir variáveis de ambiente
 
 log $YELLOW "Iniciando o projeto com PM2..."
-# Iniciar o projeto com PM2 e definir o nome da aplicação como "api"
-pm2 start npm --name devcloud --  start
+# Iniciar o projeto com PM2 e definir o nome da aplicação como "devcloud"
+pm2 start npm --name devcloud -- start
 
-# Instalar e configurar o firewall para permitir a porta dinâmica
+# Instalar e configurar o firewall para permitir a porta 3999
 log $YELLOW "Instalando e configurando o firewall..."
 
-yes | sudo ufw enable
-# Permitir a porta dinâmica no firewall
-sudo ufw allow 3999/tcp
+# Habilitar o firewall se ainda não estiver habilitado
+sudo ufw status | grep -q "Status: active" || sudo ufw enable
 
-# Habilitar o firewall, se ainda não estiver habilitado
+# Permitir a porta 3999 no firewall
+sudo ufw allow 3999/tcp
 
 # Mostrar o status do firewall
 sudo ufw status
@@ -77,7 +77,7 @@ sudo ufw status
 log $GREEN "Configuração concluída com sucesso!"
 
 # Finalizar
- log $GREEN "###########################################################"
- log $GREEN "Aplicação FrontEnd:"
- log $GREEN "Acesse a FrontEnd em: http://$IP:3999"
- log $GREEN "###########################################################"
+log $GREEN "###########################################################"
+log $GREEN "Aplicação FrontEnd:"
+log $GREEN "Acesse a FrontEnd em: http://$IP:3999"
+log $GREEN "###########################################################"
