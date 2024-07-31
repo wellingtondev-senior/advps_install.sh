@@ -34,7 +34,7 @@ INSTALL_NODE_PM2_URL="https://raw.githubusercontent.com/wellingtondev-senior/adv
 API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/api.sh"
 FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/frontend.sh"
 INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
-
+INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
 # Caminho para os scripts temporários
 INSTALL_SCRIPT="./install_dependencies.sh"
 INSTALL_NODE_PM2_SCRIPT="./install_nvm_node_pm2.sh"
