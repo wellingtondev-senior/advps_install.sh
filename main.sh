@@ -57,7 +57,7 @@ download_script() {
 
 # Baixar e executar os scripts individuais
 download_script "$INSTALL_DEPENDENCIAS_URL" "$INSTALL_SCRIPT"
-download_script "$INSTALL_NODE_PM2_URL" "$INSTALL_NODE_PM2__SCRIPT"
+download_script "$INSTALL_NODE_PM2_URL" "$INSTALL_NODE_PM2_SCRIPT"
 download_script "$API_URL" "$API_SCRIPT"
 download_script "$FRONTEND_URL" "$FRONTEND_SCRIPT"
 download_script "$INSTALL_POSTGRES_URL" "$INSTALL_POSTGRES_SCRIPT"
