@@ -45,6 +45,7 @@ echo "Habilitando NGINX na inicialização do sistema..."
 systemctl enable nginx
 
 sudo ufw allow 80/tcp
+sudo ufw allow 22/tcp
 
 
 echo "Configuração do NGINX concluída!"
