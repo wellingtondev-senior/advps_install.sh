@@ -44,4 +44,7 @@ systemctl restart nginx
 echo "Habilitando NGINX na inicialização do sistema..."
 systemctl enable nginx
 
+sudo ufw allow 80/tcp
+
+
 echo "Configuração do NGINX concluída!"
