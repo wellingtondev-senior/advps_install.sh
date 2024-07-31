@@ -30,17 +30,17 @@ log $SKY "######################################################################
 
 # URLs para os scripts individuais
 INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_dependencies.sh"
-NODE_PM2_INSTALL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_nvm_node_pm2.sh"
-SETUP_API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/api.sh"
-SETUP_FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/frontend.sh"
-SETUP_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
+INSTALL_NODE_PM2__URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_nvm_node_pm2.sh"
+API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/api.sh"
+FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/frontend.sh"
+INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
 
 # Caminho para os scripts temporários
-INSTALL_SCRIPT="./01_install_dependencies.sh"
-NODE_PM2_INSTALL_SCRIPT="./03_install_nvm_node_pm2.sh"
-SETUP_API_SCRIPT="./04_setup_api.sh"
-SETUP_FRONTEND_SCRIPT="./05_setup_frontend.sh"
-SETUP_POSTGRES_SCRIPT="./06_install_postgresql.sh"
+INSTALL_SCRIPT="./install_dependencies.sh"
+INSTALL_NODE_PM2_SCRIPT="./install_nvm_node_pm2.sh"
+API_SCRIPT="./api.sh"
+FRONTEND_SCRIPT="./frontend.sh"
+INSTALL_POSTGRES_SCRIPT="./install_postgresql.sh"
 
 # Função para baixar e verificar os scripts
 download_script() {
@@ -57,10 +57,11 @@ download_script() {
 
 # Baixar e executar os scripts individuais
 download_script "$INSTALL_DEPENDENCIAS_URL" "$INSTALL_SCRIPT"
-download_script "$NODE_PM2_INSTALL_URL" "$NODE_PM2_INSTALL_SCRIPT"
-download_script "$SETUP_API_URL" "$SETUP_API_SCRIPT"
-download_script "$SETUP_FRONTEND_URL" "$SETUP_FRONTEND_SCRIPT"
-download_script "$SETUP_POSTGRES_URL" "$SETUP_POSTGRES_SCRIPT"
+download_script "$INSTALL_NODE_PM2__URL" "$INSTALL_NODE_PM2__SCRIPT"
+download_script "$API_URL" "$API_SCRIPT"
+download_script "$FRONTEND_URL" "$FRONTEND_SCRIPT"
+download_script "$INSTALL_POSTGRES_URL" "$INSTALL_POSTGRES_SCRIPT"
+
 
 # Executar o script de instalação das dependências
 log $YELLOW "Executando o script de instalação das dependências..."
@@ -74,15 +75,23 @@ fi
 
 # Executar o script de instalação do Node.js e PM2
 log $YELLOW "Executando o script de instalação do Node.js e PM2..."
-bash "$NODE_PM2_INSTALL_SCRIPT"
+bash "$INSTALL_NODE_PM2_SCRIPT"
 if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de instalação do Node.js e PM2. Abortando."
     exit 1
 fi
 
+# Executar o script de instalação do PostgreSQL
+log $YELLOW "Executando o script de instalação do PostgreSQL..."
+bash "$INSTALL_POSTGRES_SCRIPT"
+if [ $? -ne 0 ]; then
+    log $RED "Erro ao executar o script de instalação do PostgreSQL. Abortando."
+    exit 1
+fi
+
 # Executar o script de configuração da API
 log $YELLOW "Executando o script de configuração da API..."
-bash "$SETUP_API_SCRIPT"
+bash "$API_SCRIPT"
 if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de configuração da API. Abortando."
     exit 1
@@ -90,35 +99,42 @@ fi
 
 # Executar o script de configuração do Frontend
 log $YELLOW "Executando o script de configuração do Frontend..."
-bash "$SETUP_FRONTEND_SCRIPT"
+bash "$FRONTEND_SCRIPT"
 if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de configuração do Frontend. Abortando."
     exit 1
 fi
 
 
-# Executar o script de instalação do PostgreSQL
-log $YELLOW "Executando o script de instalação do PostgreSQL..."
-bash "$SETUP_POSTGRES_SCRIPT"
-if [ $? -ne 0 ]; then
-    log $RED "Erro ao executar o script de instalação do PostgreSQL. Abortando."
-    exit 1
-fi
-
-log $GREEN "Todos os scripts foram executados com sucesso. Configuração concluída."
+# Mensagens de log
 log $GREEN "#############################################################################"
-log $GREEN "Configuração concluída. Credenciais de acesso padrão:"
+log $GREEN "#                                                                           #"
+log $GREEN "#   Todos os scripts foram executados com sucesso. Configuração concluída. #"
+log $GREEN "#                                                                           #"
 log $GREEN "#############################################################################"
-log $GREEN "  PostgreSQL:"
-log $GREEN "  Username: postgres"
-log $GREEN "  Password: admin#master23451"
+log $GREEN "#                                                                           #"
+log $GREEN "#   Configuração concluída. Credenciais de acesso padrão:                   #"
+log $GREEN "#                                                                           #"
 log $GREEN "#############################################################################"
-log $GREEN "  Aplicação:"
+log $GREEN "#                                                                           #"
+log $GREEN "#   PostgreSQL:                                                              #"
+log $GREEN "#   Username: postgres                                                       #"
+log $GREEN "#   Password: admin#master23451                                              #"
+log $GREEN "#                                                                           #"
 log $GREEN "#############################################################################"
-log $GREEN "  Username: master"
-log $GREEN "  Password: master"
+log $GREEN "#                                                                           #"
+log $GREEN "#   Aplicação:                                                               #"
+log $GREEN "#                                                                           #"
+log $GREEN "#   Username: master                                                         #"
+log $GREEN "#   Password: master                                                         #"
+log $GREEN "#                                                                           #"
 log $GREEN "#############################################################################"
-log $GREEN "Acesse a aplicação em: http://$IP:3999"
-log $GREEN "Acesse a API em: http://$IP:58551"
-log $GREEN "Script de configuração concluído com sucesso."
+log $GREEN "#                                                                           #"
+log $GREEN "#   Acesse a aplicação em: http://$IP:3999                                  #"
+log $GREEN "#   Acesse a API em: http://$IP:58551                                       #"
+log $GREEN "#                                                                           #"
+log $GREEN "#############################################################################"
+log $GREEN "#                                                                           #"
+log $GREEN "#   Script de configuração concluído com sucesso.                           #"
+log $GREEN "#                                                                           #"
 log $GREEN "#############################################################################"
