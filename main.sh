@@ -13,7 +13,9 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
+SKY='\033[48;5;33m'
 NC='\033[0m' # Sem cor
+IP=$(curl -s https://ipinfo.io/ip)
 
 # Função de log para imprimir mensagens com timestamps e cores
 log() {
@@ -22,14 +24,20 @@ log() {
     echo -e "${color}[$(date '+%Y-%m-%d %H:%M:%S')] $@${NC}"
 }
 
-log $BLUE "Iniciando o script principal para configuração do servidor e projeto..."
+log $SKY "################################################################################"
+log $SKY "# Script Principal para configuração do servidor e projeto"
+log $SKY "# Autor: [Seu Nome]"
+log $SKY "# Data: [Data de Criação]"
+log $SKY "# Descrição: Este script baixa e executa os scripts individuais" 
+log $SKY "# para configurar o servidor, o NGINX e o projeto."
+log $SKY "################################################################################"
 
 # URLs para os scripts individuais
-INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/01_install_dependencies.sh"
-NODE_PM2_INSTALL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/03_install_nvm_node_pm2.sh"
-SETUP_API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/04_setup_api.sh"
-SETUP_FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/05_setup_frontend.sh"
-SETUP_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/06_install_postgresql.sh"
+INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_dependencies.sh"
+NODE_PM2_INSTALL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_nvm_node_pm2.sh"
+SETUP_API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/api.sh"
+SETUP_FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/frontend.sh"
+SETUP_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
 
 # Caminho para os scripts temporários
 INSTALL_SCRIPT="./01_install_dependencies.sh"
@@ -100,7 +108,7 @@ if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de instalação do PostgreSQL. Abortando."
     exit 1
 fi
-IP=$(curl -s https://ipinfo.io/ip)
+
 log $GREEN "Todos os scripts foram executados com sucesso. Configuração concluída."
 log $GREEN "#############################################################################"
 log $GREEN "Configuração concluída. Credenciais de acesso padrão:"

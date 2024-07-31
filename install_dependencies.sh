@@ -35,8 +35,6 @@ sudo apt-get install -y \
     git \
     ufw \
     nginx \
-    docker.io \
-    docker-compose
 
 #  Configurar o Docker para iniciar automaticamente
 # log $YELLOW "Configurando o Docker para iniciar automaticamente..."
