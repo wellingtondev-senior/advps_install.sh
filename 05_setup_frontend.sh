@@ -28,7 +28,7 @@ log() {
 log $BLUE "Iniciando a configuração do FRONTEND..."
 
 # Configuração do diretório do projeto e execução do Docker
-PROJECT_DIR="/opt/devcloud/devcloud.top"
+PROJECT_DIR="/var/www/devcloud/devcloud.top"
 REPO_URL="git@github.com:wellingtondev-senior/devcloud.top.git"
 
 # Criar o diretório do projeto e clonar o repositório
