@@ -1,12 +1,5 @@
 #!/bin/bash
 
-################################################################################
-# Script de Instalação de Dependências - Ubuntu 20.04
-# Autor: [Seu Nome]
-# Data: [Data de Criação]
-# Descrição: Este script instala NGINX, Docker, Docker Compose, NVM, Node.js LTS,
-#            PM2 e PostgreSQL em uma máquina Ubuntu 20.04.
-################################################################################
 
 # Cores para log
 RED='\033[0;31m'
