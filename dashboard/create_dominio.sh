@@ -12,7 +12,7 @@ NC='\033[0m' # Sem cor
 # Verifica se as variáveis de ambiente PORT e DOMAIN estão definidas
 if [ -z "$PORT" ] || [ -z "$DOMINIO" ]; then
   echo "As variáveis de ambiente PORT e DOMAIN devem ser definidas."
-  echo "Exemplo: PORT=80 DOMAIN=example.com ./script.sh"
+  echo "Exemplo: PORT=80 DOMINIO=example.com ./script.sh"
   exit 1
 fi
 
