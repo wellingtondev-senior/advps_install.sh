@@ -32,7 +32,7 @@ fi
 # Criar configuração do NGINX para o domínio
 cat <<EOF | sudo tee /etc/nginx/sites-available/$DOMAIN
 server {
-    listen $PORT;
+    listen 80;
     server_name $DOMAIN;
 
     location / {
@@ -54,7 +54,7 @@ sudo nginx -t
 # Reiniciar o NGINX para aplicar as mudanças
 sudo systemctl restart nginx
 
-echo "Configuração do NGINX para $DOMAIN na porta $PORT foi concluída."
+echo "Configuração do NGINX para $DOMAIN na porta 80 foi concluída."
 
 # Log da porta e domínio definidos
 log $GREEN "A PORTA QUE VOCÊ DEFINIU É $PORT PARA O DOMÍNIO $DOMAIN"
