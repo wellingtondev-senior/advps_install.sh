@@ -16,5 +16,5 @@ if [ -z "$PORT" ] || [ -z "$DOMAIN" ]; then
   exit 1
 fi
 
-echo $GREEN "A PORTA QUE VC QUE SETAR $PORT PARA DOMINIO $DMINIO" 
+log $GREEN "A PORTA QUE VC QUE SETAR $PORT PARA DOMINIO $DMINIO"
 
