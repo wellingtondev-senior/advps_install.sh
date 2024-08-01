@@ -113,6 +113,8 @@ if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de configuração do NGINX. Abortando."
     exit 1
 fi
+sudo ufw allow 'Nginx Full'
+
 pm2 save
 # Mensagens de log
 log $GREEN "#############################################################################"
