@@ -85,5 +85,5 @@ log $GREEN "Configuração concluída com sucesso!"
 # Finalizar
  log $GREEN "###########################################################"
  log $GREEN "Aplicação API:"
- log $GREEN "Acesse a API em: http://$IP:58551"
+ log $GREEN "Acesse a API em: http://$IP:58552"
  log $GREEN "###########################################################"
