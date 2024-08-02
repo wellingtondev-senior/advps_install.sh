@@ -10,7 +10,6 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # Sem cor
 
 # Variáveis para valores configuráveis
-USER="sintegre"
 PASSWORD="Sintegre@20240"
 PORT=6379
 
@@ -43,28 +42,15 @@ sudo ufw allow $PORT/tcp && log $GREEN "Porta $PORT liberada no firewall." || {
     exit 1
 }
 
-log $YELLOW "Configurando um novo usuário de acesso ao Redis..."
+log $YELLOW "Configurando o Redis para autenticação com senha e acesso externo..."
 REDIS_CONF="/etc/redis/redis.conf"
 
-# Adicione o novo usuário ao arquivo de configuração do Redis
-if grep -q "^user $USER" "$REDIS_CONF"; then
-    echo "Usuário $USER já existe no arquivo de configuração."
-else
-    echo "user $USER on >$PASSWORD ~* +@all" | sudo tee -a "$REDIS_CONF" > /dev/null
-    echo "Novo usuário $USER adicionado ao arquivo de configuração."
-fi
+# Configurar o Redis para autenticação com senha e acesso externo
+sudo sed -i "s/^bind 127.0.0.1 ::1/bind 0.0.0.0/" $REDIS_CONF
+sudo sed -i "s/^# requirepass .*/requirepass $PASSWORD/" $REDIS_CONF
 
-# Reinicie o serviço Redis para aplicar as mudanças
-sudo systemctl restart redis-server
-
-log $YELLOW "Configurando o Redis para acesso externo global..."
-# Configurar o Redis para acesso externo global
-sudo sed -i "s/^bind 127.0.0.1 ::1/bind 0.0.0.0 ::0/" $REDIS_CONF && log $GREEN "Redis configurado para acesso externo."
-sudo sed -i "s/^# requirepass .*/requirepass $PASSWORD/" $REDIS_CONF && log $GREEN "Senha do Redis configurada."
-
-log $YELLOW "Reiniciando o serviço Redis para aplicar as mudanças..."
 # Reiniciar o serviço Redis para aplicar as mudanças
-sudo systemctl restart redis && log $GREEN "Serviço Redis reiniciado." || {
+sudo systemctl restart redis-server && log $GREEN "Serviço Redis reiniciado." || {
     log $RED "Falha ao reiniciar o serviço Redis."
     exit 1
 }
@@ -82,7 +68,7 @@ fi
 
 # Criar a URL de conexão externa
 EXTERNAL_IP=$(curl -s ifconfig.me)
-CONNECTION_URL="redis://$USER:$PASSWORD@$EXTERNAL_IP:$PORT"
+CONNECTION_URL="redis://:$PASSWORD@$EXTERNAL_IP:$PORT"
 
 log $YELLOW "URL de conexão externa para o Redis:"
 echo -e "${GREEN}$CONNECTION_URL${NC}"
