@@ -10,8 +10,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # Sem cor
 
 # Variáveis para valores configuráveis
-USER="sintegre_redis"
-PASSWORD="sintegre@2024"
+USER="sintegre"
+PASSWORD="Sintegre#2024#"
 PORT=6379
 
 # Função para exibir log colorido
@@ -68,7 +68,7 @@ sudo systemctl restart redis && log $GREEN "Serviço Redis reiniciado." || {
 
 log $YELLOW "Testando as credenciais do Redis..."
 # Testar as credenciais do Redis
-REDIS_CLI_RESULT=$(redis-cli -h 127.0.0.1 -p $PORT -a $PASSWORD ping)
+REDIS_CLI_RESULT=$(redis-cli -h 127.0.0.1 -p $PORT -a $PASSWORD --no-auth-warning ping)
 
 if [ "$REDIS_CLI_RESULT" == "PONG" ]; then
     log $GREEN "As credenciais do Redis estão corretas."
