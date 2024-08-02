@@ -36,6 +36,7 @@ FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_insta
 INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
 SETUP_NGINX_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/setup_nginx.sh"
 INSTALL_SETUP_REDIS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_setup.redis.sh"
+MICROSERVICO_EMAIL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/email_microservico.sh"
 
 
 
@@ -48,6 +49,10 @@ FRONTEND_SCRIPT="./frontend.sh"
 INSTALL_POSTGRES_SCRIPT="./install_postgresql.sh"
 SETUP_NGINX_SCRIPT="./setup_nginx.sh"
 INSTALL_SETUP_REDIS_SCRIPT="./setup_nginx.sh"
+MICROSERVICO_EMAIL_SCRIPT="./email_microservico.sh"
+
+
+
 # Função para baixar e verificar os scripts
 download_script() {
     local url=$1
@@ -69,6 +74,8 @@ download_script "$FRONTEND_URL" "$FRONTEND_SCRIPT"
 download_script "$INSTALL_POSTGRES_URL" "$INSTALL_POSTGRES_SCRIPT"
 download_script "$SETUP_NGINX_URL" "$SETUP_NGINX_SCRIPT"
 download_script "$INSTALL_SETUP_REDIS_URL" "$INSTALL_SETUP_REDIS_SCRIPT"
+download_script "$MICROSERVICO_EMAIL_URL" "$MICROSERVICO_EMAIL_SCRIPT"
+
 # Executar o script de instalação das dependências
 log $YELLOW "Executando o script de instalação das dependências..."
 bash "$INSTALL_SCRIPT"
@@ -124,6 +131,14 @@ log $YELLOW "Executando o script de configuração do REDIS..."
 bash "$INSTALL_SETUP_REDIS_SCRIPT"
 if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de configuração do REDIS. Abortando."
+    exit 1
+fi
+
+# Executar o script de configuração do Frontend
+log $YELLOW "Executando o script de configuração do Microserviço Email..."
+bash "$MICROSERVICO_EMAIL_SCRIPT"
+if [ $? -ne 0 ]; then
+    log $RED "Erro ao executar o script de configuração do Microserviço Email. Abortando."
     exit 1
 fi
 
