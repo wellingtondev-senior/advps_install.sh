@@ -11,6 +11,13 @@ log() {
     echo -e "${1}${2}${NC}"
 }
 
+log $YELLOW "Atualizando os pacotes e instalando o Redis..."
+# Atualizar os pacotes e instalar o Redis
+sudo apt update && sudo apt install -y redis-server && log $GREEN "Redis instalado com sucesso." || {
+    log $RED "Falha ao instalar o Redis."
+    exit 1
+}
+
 log $YELLOW "Verificando se o firewall está ativo..."
 # Verificar se o firewall está ativo e ativá-lo se necessário
 sudo ufw status | grep -q "Status: active" || { 
