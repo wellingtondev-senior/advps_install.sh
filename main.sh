@@ -35,6 +35,11 @@ API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh
 FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/frontend.sh"
 INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
 SETUP_NGINX_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/setup_nginx.sh"
+INSTALL_SETUP_REDIS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_setup.redis.sh"
+
+
+
+
 # Caminho para os scripts temporários
 INSTALL_SCRIPT="./install_dependencies.sh"
 INSTALL_NODE_PM2_SCRIPT="./install_nvm_node_pm2.sh"
@@ -42,7 +47,7 @@ API_SCRIPT="./api.sh"
 FRONTEND_SCRIPT="./frontend.sh"
 INSTALL_POSTGRES_SCRIPT="./install_postgresql.sh"
 SETUP_NGINX_SCRIPT="./setup_nginx.sh"
-
+INSTALL_SETUP_REDIS_SCRIPT="./setup_nginx.sh"
 # Função para baixar e verificar os scripts
 download_script() {
     local url=$1
@@ -63,7 +68,7 @@ download_script "$API_URL" "$API_SCRIPT"
 download_script "$FRONTEND_URL" "$FRONTEND_SCRIPT"
 download_script "$INSTALL_POSTGRES_URL" "$INSTALL_POSTGRES_SCRIPT"
 download_script "$SETUP_NGINX_URL" "$SETUP_NGINX_SCRIPT"
-
+download_script "$INSTALL_SETUP_REDIS_URL" "$INSTALL_SETUP_REDIS_SCRIPT"
 # Executar o script de instalação das dependências
 log $YELLOW "Executando o script de instalação das dependências..."
 bash "$INSTALL_SCRIPT"
@@ -113,6 +118,15 @@ if [ $? -ne 0 ]; then
     log $RED "Erro ao executar o script de configuração do NGINX. Abortando."
     exit 1
 fi
+
+# Executar o script de configuração do Frontend
+log $YELLOW "Executando o script de configuração do REDIS..."
+bash "$INSTALL_SETUP_REDIS_SCRIPT"
+if [ $? -ne 0 ]; then
+    log $RED "Erro ao executar o script de configuração do REDIS. Abortando."
+    exit 1
+fi
+
 sudo ufw allow 'Nginx Full'
 
 pm2 save
