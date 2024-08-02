@@ -44,15 +44,18 @@ sudo ufw allow $PORT/tcp && log $GREEN "Porta $PORT liberada no firewall." || {
 }
 
 log $YELLOW "Configurando um novo usuário de acesso ao Redis..."
-# Configurar um novo usuário de acesso ao Redis
 REDIS_CONF="/etc/redis/redis.conf"
-REDIS_USERS_CONF="/etc/redis/users.acl"
 
-# Backup do arquivo de configuração original
-sudo cp $REDIS_CONF ${REDIS_CONF}.backup && log $GREEN "Backup do arquivo de configuração original criado."
+# Adicione o novo usuário ao arquivo de configuração do Redis
+if grep -q "^user $USER" "$REDIS_CONF"; then
+    echo "Usuário $USER já existe no arquivo de configuração."
+else
+    echo "user $USER on >$PASSWORD ~* +@all" | sudo tee -a "$REDIS_CONF" > /dev/null
+    echo "Novo usuário $USER adicionado ao arquivo de configuração."
+fi
 
-# Adicionar o novo usuário no arquivo de configuração do Redis
-echo "user $USER on +@all ~* &* >$PASSWORD" | sudo tee -a $REDIS_USERS_CONF && log $GREEN "Novo usuário adicionado ao Redis."
+# Reinicie o serviço Redis para aplicar as mudanças
+sudo systemctl restart redis-server
 
 log $YELLOW "Configurando o Redis para acesso externo global..."
 # Configurar o Redis para acesso externo global
