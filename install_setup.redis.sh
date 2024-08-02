@@ -11,7 +11,7 @@ NC='\033[0m' # Sem cor
 
 # Variáveis para valores configuráveis
 USER="sintegre"
-PASSWORD="Sintegre#2024#"
+PASSWORD="Sintegre@20240"
 PORT=6379
 
 # Função para exibir log colorido
