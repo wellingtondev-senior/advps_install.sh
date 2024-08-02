@@ -84,6 +84,6 @@ log $GREEN "Configuração concluída com sucesso!"
 
 # Finalizar
  log $GREEN "###########################################################"
- log $GREEN "Aplicação API:"
- log $GREEN "Acesse a API em: http://$IP:58552"
+ log $GREEN "Aplicação Microserviço Email:"
+ log $GREEN "Acesse ao Microserviço Email em: http://$IP:58552"
  log $GREEN "###########################################################"
