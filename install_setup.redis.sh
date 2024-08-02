@@ -7,7 +7,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # Sem cor
 
 # Variáveis para valores configuráveis
-USER="sintegre"
+USER="sintegre_redis"
 PASSWORD="SintegreRedis20242024"
 PORT=6379
 
