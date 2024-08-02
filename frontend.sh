@@ -52,7 +52,7 @@ fi
 # Instalar dependências e construir o projeto
 log $YELLOW "Instalando dependências do projeto..."
 npm install
-
+npm i sharp
 log $YELLOW "Construindo o projeto..."
 npm run build
 
