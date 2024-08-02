@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Limpar o cache do terminal
+hash -r
+
 # Definir cores
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -7,8 +10,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # Sem cor
 
 # Variáveis para valores configuráveis
-USER="sintegre_redis"
-PASSWORD="SintegreRedis20242024"
+USER="sintegre"
+PASSWORD="Sintegre#2024#"
 PORT=6379
 
 # Função para exibir log colorido
@@ -73,5 +76,12 @@ else
     log $RED "Falha ao autenticar no Redis com as credenciais fornecidas."
     exit 1
 fi
+
+# Criar a URL de conexão externa
+EXTERNAL_IP=$(curl -s ifconfig.me)
+CONNECTION_URL="redis://$USER:$PASSWORD@$EXTERNAL_IP:$PORT"
+
+log $YELLOW "URL de conexão externa para o Redis:"
+echo -e "${GREEN}$CONNECTION_URL${NC}"
 
 log $GREEN "Configurações do Redis concluídas."
