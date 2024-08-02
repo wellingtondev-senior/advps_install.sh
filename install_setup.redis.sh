@@ -59,4 +59,15 @@ sudo systemctl restart redis && log $GREEN "Serviço Redis reiniciado." || {
     exit 1
 }
 
+log $YELLOW "Testando as credenciais do Redis..."
+# Testar as credenciais do Redis
+REDIS_CLI_RESULT=$(redis-cli -h 127.0.0.1 -p $PORT -a Sintegre#2024# ping)
+
+if [ "$REDIS_CLI_RESULT" == "PONG" ]; then
+    log $GREEN "As credenciais do Redis estão corretas."
+else
+    log $RED "Falha ao autenticar no Redis com as credenciais fornecidas."
+    exit 1
+fi
+
 log $GREEN "Configurações do Redis concluídas."
