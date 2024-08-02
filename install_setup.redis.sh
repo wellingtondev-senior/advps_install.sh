@@ -10,8 +10,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # Sem cor
 
 # Variáveis para valores configuráveis
-USER="sintegre"
-PASSWORD="Sintegre#2024#"
+USER="sintegre_redis"
+PASSWORD="sintegre@2024"
 PORT=6379
 
 # Função para exibir log colorido
