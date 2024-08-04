@@ -1,13 +1,5 @@
 #!/bin/bash
 
-################################################################################
-# Script para configurar o projeto
-# Autor: [Seu Nome]
-# Data: [Data de Criação]
-# Descrição: Este script configura o projeto, instala Node.js, PM2, Docker e
-#            Docker Compose, e finaliza a configuração.
-################################################################################
-
 # Cores para log
 RED='\033[0;31m'
 GREEN='\033[0;32m'
