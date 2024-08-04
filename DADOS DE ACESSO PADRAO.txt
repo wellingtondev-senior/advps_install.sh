@@ -7,7 +7,18 @@ CONTA REDIS
 
 SERVIDOR: (IP DA VPS)
 PORT:6379
-USUARIO:postgres
+
 PASSWORD:Sintegre@20240
+
+#########################################################################
+
+#########################################################################
+
+CONTA PostgresSQL
+
+SERVIDOR: (IP DA VPS)
+PORT:5432
+USUARIO:wellingtonDev
+PASSWORD:wellingtondev_app_db_456_
 
 #########################################################################
