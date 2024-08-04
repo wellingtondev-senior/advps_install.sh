@@ -1,0 +1,13 @@
+OBSERVAÇÃO:As controladoras não vão ser configurado os dominio 
+mais como são microserviço a comunicação ocorrera pelo 
+
+#########################################################################
+
+CONTA REDIS 
+
+SERVIDOR: (IP DA VPS)
+PORT:6379
+USUARIO:postgres
+PASSWORD:Sintegre@20240
+
+#########################################################################
