@@ -25,6 +25,5 @@ Este comando efetuará a instalação e configuração inicial para o servidor p
 ```bash
 curl -fsSL https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/main.sh | bash
 ```
-```
 
-Se precisar de mais alguma coisa, é só avisar!
+
