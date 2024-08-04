@@ -1,8 +1,15 @@
-# Instalação Scripts de configuração de VPS
+# Instalação
 
 ### IMPORTANTE!
-```plaintext
 Gere a chave pública SSH de todos os servidores que você criar e vincule-a ao GitHub.
+
+Para gerar a chave SSH, use o comando:
+```bash
+ssh-keygen -t rsa -b 4096 -C "seu_email@exemplo.com"
+```
+Depois, visualize a chave pública no terminal com o comando:
+```bash
+cat ~/.ssh/id_rsa.pub
 ```
 
 ## Instalação Inicial no Servidor Principal
@@ -20,3 +27,4 @@ curl -fsSL https://raw.githubusercontent.com/wellingtondev-senior/advps_install.
 ```
 ```
 
+Se precisar de mais alguma coisa, é só avisar!
