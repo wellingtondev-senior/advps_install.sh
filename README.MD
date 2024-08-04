@@ -1,7 +1,4 @@
-Aqui está o markdown corrigido e formatado para fácil cópia:
-
-```markdown
-# Instalação
+# Instalação Scripts de configuração de VPS
 
 ### IMPORTANTE!
 ```plaintext
