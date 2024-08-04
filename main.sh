@@ -29,14 +29,14 @@ log $SKY "#                                                                     
 log $SKY "################################################################################"
 
 # URLs para os scripts individuais
-INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_dependencies.sh"
-INSTALL_NODE_PM2_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_nvm_node_pm2.sh"
-API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/api.sh"
-FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/frontend.sh"
-INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_postgresql.sh"
-SETUP_NGINX_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/setup_nginx.sh"
-INSTALL_SETUP_REDIS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/install_setup.redis.sh"
-MICROSERVICO_EMAIL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/email_microservico.sh"
+INSTALL_DEPENDENCIAS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/install/install_dependencies.sh"
+INSTALL_NODE_PM2_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/install/install_nvm_node_pm2.sh"
+API_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/api.sh"
+FRONTEND_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/frontend.sh"
+INSTALL_POSTGRES_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/install/install_postgresql.sh"
+SETUP_NGINX_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/setup/setup_nginx.sh"
+INSTALL_SETUP_REDIS_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/install/install_setup.redis.sh"
+MICROSERVICO_EMAIL_URL="https://raw.githubusercontent.com/wellingtondev-senior/advps_install.sh/master/cloud/email_microservico.sh"
 
 
 
