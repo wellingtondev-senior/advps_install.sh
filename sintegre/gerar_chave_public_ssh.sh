@@ -2,7 +2,7 @@
 
 # Defina o caminho e o e-mail
 KEY_PATH="$HOME/.ssh/id_rsa"
-EMAIL="seu_email@example.com"
+EMAIL="seu@example.com"
 
 # Verifique se o diretório ~/.ssh existe
 if [ ! -d "$HOME/.ssh" ]; then
