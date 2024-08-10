@@ -11,7 +11,7 @@ if [ ! -d "$HOME/.ssh" ]; then
 fi
 
 # Gere o par de chaves SSH, sobrescrevendo qualquer chave existente
-ssh-keygen -t rsa -b 4096 -C "$EMAIL" -f "$KEY_PATH" -N ""
+ssh-keygen -t rsa -b 4096 -C "$EMAIL" -f "$KEY_PATH" -N "" -q <<< "y"
 
 # Informe o usuário sobre a chave gerada
 echo "Chave SSH gerada com sucesso!"
